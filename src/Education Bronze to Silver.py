@@ -40,3 +40,13 @@ education = \
     .withColumn('High school diploma only, 2017-21', regexp_replace('High school diploma only, 2017-21', ",","").cast(IntegerType())) \
     .withColumn("Some college or associate's degree, 2017-21", regexp_replace("Some college or associate's degree, 2017-21", ",","").cast(IntegerType())) \
     .withColumn("Bachelor's degree or higher, 2017-21", regexp_replace("Bachelor's degree or higher, 2017-21", ",","").cast(IntegerType()))
+
+# Rename Columns
+education = education.withColumnRenamed('Less than a high school diploma, 2017-21', 'less_than_hs_17-21') \
+    .withColumnRenamed('High school diploma only, 2017-21', 'hs_only_17-21') \
+    .withColumnRenamed("Some college or associate's degree, 2017-21", "some_college_17-21") \
+    .withColumnRenamed("Bachelor's degree or higher, 2017-21", "bach_or_higher_17-21") \
+    .withColumnRenamed('Percent of adults with less than a high school diploma, 2017-21', "perc_less_than_hs_17-21") \
+    .withColumnRenamed('Percent of adults with a high school diploma only, 2017-21', "perc_hs_only_17-21") \
+    .withColumnRenamed("Percent of adults completing some college or associate's degree, 2017-21", "perc_some_college_17-21") \
+    .withColumnRenamed("Percent of adults with a bachelor's degree or higher, 2017-21", "perc_bach_or_higher_17-21")
