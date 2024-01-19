@@ -76,3 +76,14 @@ df = df.select('year', 'county_fips', 'party')
 from pyspark.sql.functions import initcap
 
 df = df.withColumn('party', initcap(df.party))
+
+# COMMAND ----------
+
+from pyspark.sql.functions import col
+from pyspark.sql.functions import first
+
+df = df.groupBy("county_fips").pivot("year").agg(first("party").alias("party"))
+
+# COMMAND ----------
+
+df = df.withColumnRenamed('2016', '2016_party').withColumnRenamed('2020', '2020_party')
