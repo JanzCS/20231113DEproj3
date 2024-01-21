@@ -1,4 +1,9 @@
 # Databricks notebook source
+from pyspark.sql import functions as F
+from pyspark.sql.window import Window
+
+# COMMAND ----------
+
 # load in files from silver layer
 cont_name = "silver-layer"
 storage_acct_name = "20231113desa"
@@ -15,30 +20,12 @@ display(contract)
 # COMMAND ----------
 
 # MAGIC %md
-# MAGIC ## Select out contract cols
-
-# COMMAND ----------
-
-contract.select('transaction_unique_key', 
-                'naics_code', 
-                'place_of_manufacture_code',
-                'national_interest_action_code', 
-                'country_of_product_or_service_origin_code',
-                'contingency_humanitarian_or_peacekeeping_operation_code',
-                'contracting_officers_determination_of_business_size_code',
-                'foreign_funding',
-                'product_or_service_code',
-                'domestic_or_foreign_entity_code').display()
-
-# COMMAND ----------
-
-# MAGIC %md
 # MAGIC ## Dimension tables
 
 # COMMAND ----------
 
 # MAGIC %md
-# MAGIC ### 1. Small Business Dimension
+# MAGIC ### Small Business Dimension
 
 # COMMAND ----------
 
@@ -75,97 +62,198 @@ business_size.display()
 # COMMAND ----------
 
 # MAGIC %md
-# MAGIC ### 2. Humanitarian 
+# MAGIC ### Humanitarian 
 
 # COMMAND ----------
 
 humanitarian_or_peacekeeping = contract.select('contingency_humanitarian_or_peacekeeping_operation_code', 'contingency_humanitarian_or_peacekeeping_operation')
-humanitarian_or_peacekeeping.groupBy('contingency_humanitarian_or_peacekeeping_operation_code', 'contingency_humanitarian_or_peacekeeping_operation').count().display()
+humanitarian_or_peacekeeping = humanitarian_or_peacekeeping.dropDuplicates().dropna()
+
+#Add surrogate primary key 
+window_spec = Window.orderBy('contingency_humanitarian_or_peacekeeping_operation_code', 'contingency_humanitarian_or_peacekeeping_operation')
+humanitarian_or_peacekeeping = humanitarian_or_peacekeeping.withColumn('humanitarian_or_peacekeeping_key', F.row_number().over(window_spec))
+
+#Join new primary key into contract fact table 
+contract  = contract.join(humanitarian_or_peacekeeping, ['contingency_humanitarian_or_peacekeeping_operation_code', 
+                                                         'contingency_humanitarian_or_peacekeeping_operation'])
+contract = contract.drop('contingency_humanitarian_or_peacekeeping_operation_code', 'contingency_humanitarian_or_peacekeeping_operation')
+
+#Reorder and rename columns 
+humanitarian_or_peacekeeping = humanitarian_or_peacekeeping\
+    .withColumnRenamed('contingency_humanitarian_or_peacekeeping_operation_code', 'humanitarian_or_peacekeeping_code')\
+    .withColumnRenamed('contingency_humanitarian_or_peacekeeping_operation', 'humanitarian_or_peacekeeping_operation')
+humanitarian_or_peacekeeping = humanitarian_or_peacekeeping.select('humanitarian_or_peacekeeping_key', 'humanitarian_or_peacekeeping_code', 'humanitarian_or_peacekeeping_operation')
+
+humanitarian_or_peacekeeping.display()
 
 # COMMAND ----------
 
 # MAGIC %md
-# MAGIC ### 3. Place of manufacture 
+# MAGIC ### Place of manufacture 
 
 # COMMAND ----------
 
+#Select out columns and drop duplicates and nulls
 place_of_manufacture = contract.select('place_of_manufacture_code', 'place_of_manufacture')
-place_of_manufacture.groupBy('place_of_manufacture_code', 'place_of_manufacture').count().display()
-#display(place_of_manufacture)
+place_of_manufacture = place_of_manufacture.dropDuplicates().dropna()
+
+#Create surrogate primary key for each unique row
+window_spec = Window.orderBy('place_of_manufacture_code', 'place_of_manufacture')
+place_of_manufacture = place_of_manufacture.withColumn('place_of_manufacture_key', F.row_number().over(window_spec))
+
+#Join new surrogate key into fact table and drop columns
+contract = contract.join(place_of_manufacture, ['place_of_manufacture_code', 'place_of_manufacture'])
+contract = contract.drop('place_of_manufacture_code', 'place_of_manufacture')
+
+#Reorder columns 
+place_of_manufacture = place_of_manufacture.select('place_of_manufacture_key', 'place_of_manufacture_code', 'place_of_manufacture')
+
+display(place_of_manufacture)
 
 # COMMAND ----------
 
+# MAGIC %md
+# MAGIC ### Domestic or foreign entity
+
+# COMMAND ----------
+
+#Select out columns and drop duplicates and nulls
 domestic_or_foreign_entity = contract.select('domestic_or_foreign_entity_code', 'domestic_or_foreign_entity')
+domestic_or_foreign_entity = domestic_or_foreign_entity.dropDuplicates().dropna()
+
+#Create a new surroage primary key 
+window_spec = Window.orderBy('domestic_or_foreign_entity_code', 'domestic_or_foreign_entity')
+domestic_or_foreign_entity =  domestic_or_foreign_entity.withColumn('domestic_or_foreign_entity_key', F.row_number().over(window_spec))
+
+#Join new surrogate key into fact table and drop columns
+contract = contract.join(domestic_or_foreign_entity, ['domestic_or_foreign_entity_code', 'domestic_or_foreign_entity'])
+contract = contract.drop('domestic_or_foreign_entity_code', 'domestic_or_foreign_entity')
+
+#Reorder columns 
+domestic_or_foreign_entity = domestic_or_foreign_entity.select('domestic_or_foreign_entity_key', 'domestic_or_foreign_entity_code', 'domestic_or_foreign_entity')
+
 display(domestic_or_foreign_entity)
 
 # COMMAND ----------
 
-naics = contract.select('naics_code', 'naics_description')
+# MAGIC %md
+# MAGIC ### NAICS Table
+
+# COMMAND ----------
+
+from pyspark.sql import functions as F
+from pyspark.sql.window import Window
+
+# Get unique rows and drop null values
+naics = contract.select('naics_code', 'naics_description').dropDuplicates()
+naics = naics.dropna(subset=['naics_code'])
+
+# Create a new column 'naics_key' with a monotonically increasing ID starting from 1
+window_spec = Window.orderBy('naics_code', 'naics_description')
+naics = naics.withColumn('naics_key', F.row_number().over(window_spec))
+
+#Reorder columns
+naics = naics.select('naics_key', 'naics_code', 'naics_description')
+
+#Join new unique key into fact table and remove columns
+contract = contract.join(naics, ['naics_code', 'naics_description'])
+contract = contract.drop('naics_code', 'naics_description')
+
 display(naics)
 
 # COMMAND ----------
 
-country_of_origin = contract.select('country_of_product_or_service_origin_code','country_of_product_or_service_origin')
-display(country_of_origin)
+# MAGIC %md
+# MAGIC ### Country of origin
 
 # COMMAND ----------
 
+from pyspark.sql.functions import col
+
+#Select out columns and drop duplicates and nulls
+country_of_origin = contract.select('country_of_product_or_service_origin_code','country_of_product_or_service_origin')
+country_of_origin = country_of_origin.dropDuplicates().dropna(how='any')
+
+#Create a surrogate primary key 
+window_spec = Window.orderBy(col('country_of_product_or_service_origin_code').desc(),
+                            'country_of_product_or_service_origin')
+country_of_origin = country_of_origin.withColumn('country_of_origin_key', F.row_number().over(window_spec))
+
+#Join to main fact table to retrieve new surrogate key and drop old columns 
+contract = contract.join(country_of_origin, 
+                         ['country_of_product_or_service_origin_code','country_of_product_or_service_origin'])
+contract = contract.drop('country_of_product_or_service_origin_code','country_of_product_or_service_origin')
+
+#Rename and Reorder columns
+country_of_origin = country_of_origin\
+    .withColumnRenamed('country_of_product_or_service_origin_code', 'country_of_origin_code')\
+    .withColumnRenamed('country_of_product_or_service_origin', 'country_of_origin')
+country_of_origin = country_of_origin.select('country_of_origin_key', 'country_of_origin_code', 'country_of_origin')
+
+country_of_origin.display()
+
+# COMMAND ----------
+
+# MAGIC %md
+# MAGIC ### Foreign Funding Dimension
+
+# COMMAND ----------
+
+#Select out foreign funding columns and drop duplicates and nulls
 foreign_funding = contract.select('foreign_funding', 'foreign_funding_description')
+foreign_funding = foreign_funding.dropDuplicates().dropna()
+
+#Create a surrogate primary key 
+window_spec = Window.orderBy('foreign_funding', 'foreign_funding_description')
+foreign_funding = foreign_funding.withColumn('foreign_funding_key', F.row_number().over(window_spec))
+
+# Join contract with foreign_funding dataframe to retrieve surrogate key and drop columns 
+contract = contract.join(foreign_funding, ['foreign_funding', 'foreign_funding_description'])
+contract = contract.drop('foreign_funding', 'foreign_funding_description')
+
+#Rename and reorder columns 
+foreign_funding = foreign_funding.withColumnRenamed('foreign_funding', 'foreign_funding_code')\
+    .select('foreign_funding_key', 'foreign_funding_code', 'foreign_funding_description')
+
 display(foreign_funding)
 
 # COMMAND ----------
 
+# MAGIC %md
+# MAGIC ### Product or Service dimension
+
+# COMMAND ----------
+
+#Select out columns and drop duplicates
 product_or_service = contract.select('product_or_service_code', 'product_or_service_code_description')
+product_or_service = product_or_service.dropDuplicates().dropna()
+
+#Create a surrogate primary key 
+window_spec = Window.orderBy('product_or_service_code', 'product_or_service_code_description')
+product_or_service = product_or_service.withColumn('product_or_service_key', F.row_number().over(window_spec))
+
+#Join surrogate key into fact table and drop columns
+contract = contract.join(product_or_service, ['product_or_service_code', 'product_or_service_code_description'])
+contract = contract.drop('product_or_service_code', 'product_or_service_code_description')
+
+#Reorder columns
+product_or_service = product_or_service.select('product_or_service_key', 'product_or_service_code', 'product_or_service_code_description')
+
 display(product_or_service)
 
 # COMMAND ----------
 
-cols = ['action_date',
- 'action_date_fiscal_year',
- 'action_type_code',
- 'awarding_office_code',
- 'awarding_office_name',
- 'awarding_sub_agency_code',
- 'awarding_sub_agency_name',
- 'country_of_product_or_service_origin',
- 'country_of_product_or_service_origin_code',
- 'disaster_emergency_fund_codes_for_overall_award',
- 'funding_office_code',
- 'funding_office_name',
- 'funding_sub_agency_code',
- 'funding_sub_agency_name',
- 'last_modified_date',
- 'modification_number',
- 'object_classes_funding_this_award',
- 'obligated_amount_from_COVID-19_supplementals_for_overall_award',
- 'outlayed_amount_from_COVID-19_supplementals_for_overall_award',
- 'primary_place_of_performance_city_name',
- 'primary_place_of_performance_country_code',
- 'primary_place_of_performance_country_name',
- 'primary_place_of_performance_county_name',
- 'primary_place_of_performance_state_name',
- 'primary_place_of_performance_zip_4',
- 'prime_award_transaction_place_of_performance_cd_current',
- 'prime_award_transaction_place_of_performance_cd_original',
- 'prime_award_transaction_place_of_performance_county_fips_code',
- 'prime_award_transaction_place_of_performance_state_fips_code',
- 'prime_award_transaction_recipient_cd_current',
- 'prime_award_transaction_recipient_cd_original',
- 'prime_award_transaction_recipient_county_fips_code',
- 'prime_award_transaction_recipient_state_fips_code',
- 'program_activities_funding_this_award',
- 'recipient_city_name',
- 'recipient_country_code',
- 'recipient_country_name',
- 'recipient_county_name',
- 'recipient_name_raw',
- 'recipient_parent_name_raw',
- 'recipient_parent_uei',
- 'recipient_state_code',
- 'recipient_state_name',
- 'recipient_uei'
- ]
+# MAGIC %md
+# MAGIC ## Select out contract fact table columns of all of the foreign keys 
 
 # COMMAND ----------
 
-
+contract.select('transaction_unique_key', 
+                'naics_key', 
+                'place_of_manufacture_key', 
+                'country_of_origin_key',
+                'humanitarian_or_peacekeeping_key',
+                'business_size_key',
+                'foreign_funding_key',
+                'product_or_service_key',
+                'domestic_or_foreign_entity_key').display()
