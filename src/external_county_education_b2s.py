@@ -7,10 +7,8 @@ education_file = "Education.csv"
 count_pres_file = "countypres_2000-2020.csv"
 
 education_location = f"abfss://{raw_cont_name}@{storage_acct_name}.dfs.core.windows.net/{location_from_container}{education_file}"
-county_pres_location = f"abfss://{raw_cont_name}@{storage_acct_name}.dfs.core.windows.net/{location_from_container}{count_pres_file}"
 
 education = spark.read.csv(education_location, header=True, inferSchema=True)
-county_pres = spark.read.csv(county_pres_location, header=True, inferSchema=True)
 
 # COMMAND ----------
 
