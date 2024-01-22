@@ -36,6 +36,10 @@ selected_data = all_data.select('stname', 'ctyname', 'fips_code')
 
 # COMMAND ----------
 
+selected_data.display()
+
+# COMMAND ----------
+
 # Remove ' County' from county names
 
 from pyspark.sql.functions import regexp_replace
