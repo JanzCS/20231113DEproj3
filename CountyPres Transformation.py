@@ -19,19 +19,15 @@ df = spark.read.csv(raw_path, header=True)
 
 # COMMAND ----------
 
-df = df.withColumn('year', df.year.cast('integer')).withColumn('candidatevotes', df.candidatevotes.cast('integer'))
+df = df.withColumn('candidatevotes', df.candidatevotes.cast('integer'))
 
 # COMMAND ----------
 
-df = df.where((df.year == 2016) | (df.year == 2020))
+df = df.where((df.year == "2016") | (df.year == "2020"))
 
 # COMMAND ----------
 
 df = df.drop('office', 'version')
-
-# COMMAND ----------
-
-df = df.dropDuplicates()
 
 # COMMAND ----------
 
@@ -54,10 +50,6 @@ df_with_maximums = df.groupBy('year', 'state', 'state_po','county_name', 'county
 # COMMAND ----------
 
 df_with_maximums = df_with_maximums.withColumnRenamed('max(totalcandidatevotes)', 'totalcandidatevotes')
-
-# COMMAND ----------
-
-display(df_with_maximums.orderBy('year','county_fips'))
 
 # COMMAND ----------
 
@@ -87,3 +79,7 @@ df = df.groupBy("county_fips").pivot("year").agg(first("party").alias("party"))
 # COMMAND ----------
 
 df = df.withColumnRenamed('2016', '2016_party').withColumnRenamed('2020', '2020_party')
+
+# COMMAND ----------
+
+display(df)
