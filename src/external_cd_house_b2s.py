@@ -106,4 +106,17 @@ winner_joined_df.display()
 
 # COMMAND ----------
 
+from pyspark.sql.functions import concat_ws,col, lpad
+winner_joined_df.select(concat_ws('-', 'state_po', lpad(col('district'), 2, '0')).alias('congressional_district'), 'party_2018', 'party_2020', 'party_2022').display()
 
+
+# COMMAND ----------
+
+silver_cont_name = "silver-layer"
+storage_acct_name = "20231113desa"
+location_from_container = "usa_spending/"
+
+external_location = f"abfss://{silver_cont_name}@{storage_acct_name}.dfs.core.windows.net/{location_from_container}external/cd/house"
+
+# two dataframes for each file type
+winner_joined_df.repartition(1).write.parquet(external_location)
