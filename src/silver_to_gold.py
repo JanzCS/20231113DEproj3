@@ -44,6 +44,7 @@ transaction_fact = assistance.select(shared_cols).union(contract.select(shared_c
 # transaction date dimensions
 # IMPLEMENT
 
+
 # agency
 awarding_agency_list = transaction_fact.select('awarding_agency_code', 'awarding_agency_name').withColumnRenamed('awarding_agency_code', 'agency_code').withColumnRenamed('awarding_agency_name', 'agency_name')
 funding_agency_list = transaction_fact.select('funding_agency_code', 'funding_agency_name').withColumnRenamed('funding_agency_code', 'agency_code').withColumnRenamed('funding_agency_name', 'agency_name')
@@ -116,6 +117,80 @@ transaction_fact = transaction_fact.join(how = 'left', on = (transaction_fact.hi
 transaction_fact = transaction_fact.join(how = 'left', on = (transaction_fact.highly_compensated_officer_4_name == all_hco.hco_name), other = all_hco).withColumnRenamed('hco_code', 'highly_compensated_officer_4_code').drop('highly_compensated_officer_4_name', 'hco_name')
 
 transaction_fact = transaction_fact.join(how = 'left', on = (transaction_fact.highly_compensated_officer_5_name == all_hco.hco_name), other = all_hco).withColumnRenamed('hco_code', 'highly_compensated_officer_5_code').drop('highly_compensated_officer_5_name', 'hco_name')
+
+# COMMAND ----------
+
+display(transaction_fact)
+
+# COMMAND ----------
+
+# MAGIC %md
+# MAGIC ## Create Time Dimension Table
+
+# COMMAND ----------
+
+# Source: https://github.com/BlueGranite/calendar-dimension-spark/blob/main/CalendarDimension.sql
+
+from pyspark.sql.functions import explode, sequence, to_date
+beginDate = '2018-10-01'
+endDate = '2025-09-30'
+
+(
+  spark.sql(f"select explode(sequence(to_date('{beginDate}'), to_date('{endDate}'), interval 1 day)) as calendarDate")
+    .createOrReplaceTempView('dates')
+)
+
+# -- DBTITLE 1,Select Calendar Dimension Columns
+# -- Use this cell to develop a query that returns the desired columns. This cell can be deleted when development is completed.
+time_dimension = spark.sql(f'''
+select
+  year(calendarDate) * 10000 + month(calendarDate) * 100 + day(calendarDate) as DateKey,
+  CalendarDate,
+  year(calendarDate) AS CalendarYear,
+  date_format(calendarDate, 'MMMM') as CalendarMonth,
+  month(calendarDate) as MonthOfYear,
+  date_format(calendarDate, 'EEEE') as CalendarDay,
+  dayofweek(calendarDate) AS DayOfWeek,
+  case
+    when weekday(calendarDate) < 5 then 'Y'
+    else 'N'
+  end as IsWeekDay,
+  dayofmonth(calendarDate) as DayOfMonth,
+  case
+    when calendarDate = last_day(calendarDate) then 'Y'
+    else 'N'
+  end as IsLastDayOfMonth,
+  weekofyear(calendarDate) as WeekOfYearIso,
+  quarter(calendarDate) as QuarterOfYear,
+  /* Use fiscal periods needed by organization fiscal calendar */
+  case
+    when month(calendarDate) >= 10 then year(calendarDate) + 1
+    else year(calendarDate)
+  end as FiscalYear,
+  (month(calendarDate) + 2) % 12 + 1 AS FiscalMonthOctToSep
+from
+  dates
+order by
+  calendarDate
+  ''')
+
+# COMMAND ----------
+
+display(time_dimension)
+
+# COMMAND ----------
+
+#Add the new INT date key to fact table for action_date and last_modified_date
+time_key_df = time_dimension.select('DateKey', 'CalendarDate')
+transaction_fact = transaction_fact.join(time_key_df, transaction_fact.action_date == time_key_df.CalendarDate, 'left')
+transaction_fact = transaction_fact.withColumnRenamed('DateKey', 'action_date_key') \
+    .drop('CalendarDate', 'action_date', 'action_date_fiscal_year')
+
+#Add the new INT date key to fact table for action_date and last_modified_date
+transaction_fact = transaction_fact.join\
+    (time_key_df, transaction_fact.last_modified_date == time_key_df.CalendarDate, 'left')
+transaction_fact = transaction_fact.withColumnRenamed\
+    ('DateKey', 'last_modifed_key').drop('CalendarDate', 'last_modified_date')
 
 # COMMAND ----------
 
