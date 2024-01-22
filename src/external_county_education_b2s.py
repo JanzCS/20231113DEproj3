@@ -59,3 +59,14 @@ education = education.withColumnRenamed('Less than a high school diploma, 2017-2
 # COMMAND ----------
 
 display(education)
+
+# COMMAND ----------
+
+silver_cont_name = "silver-layer"
+storage_acct_name = "20231113desa"
+location_from_container = "usa_spending/"
+
+external_location = f"abfss://{silver_cont_name}@{storage_acct_name}.dfs.core.windows.net/{location_from_container}external/county/education"
+
+# two dataframes for each file type
+education.repartition(1).write.parquet(external_location)

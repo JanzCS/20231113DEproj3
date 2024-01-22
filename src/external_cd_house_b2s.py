@@ -107,7 +107,7 @@ winner_joined_df.display()
 # COMMAND ----------
 
 from pyspark.sql.functions import concat_ws,col, lpad
-winner_joined_df.select(concat_ws('-', 'state_po', lpad(col('district'), 2, '0')).alias('congressional_district'), 'party_2018', 'party_2020', 'party_2022').display()
+winner_joined_df = winner_joined_df.select(concat_ws('-', 'state_po', lpad(col('district'), 2, '0')).alias('congressional_district'), 'party_2018', 'party_2020', 'party_2022')
 
 
 # COMMAND ----------

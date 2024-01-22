@@ -63,3 +63,14 @@ county_pres = county_pres.withColumnRenamed('2016', '2016_party').withColumnRena
 # COMMAND ----------
 
 display(county_pres)
+
+# COMMAND ----------
+
+silver_cont_name = "silver-layer"
+storage_acct_name = "20231113desa"
+location_from_container = "usa_spending/"
+
+external_location = f"abfss://{silver_cont_name}@{storage_acct_name}.dfs.core.windows.net/{location_from_container}external/county/pres"
+
+# two dataframes for each file type
+county_pres.repartition(1).write.parquet(external_location)
