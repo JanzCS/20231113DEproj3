@@ -11,7 +11,7 @@ from pyspark.sql import Window
 # DBTITLE 1,Load in CountyPres data
 countypres_path = external_directory + "countypres_2000-2020.csv"
 country_pres_df = load_csv_data(container_name, storage_acct_name, countypres_path)
-display(country_pres_df)
+display(country_pres_df.limit(5))
 
 
 # COMMAND ----------
@@ -30,7 +30,7 @@ unemployement_df = (
         )
         .filter(col('State') != "US")
 )
-display(unemployement_df)
+display(unemployement_df.limit(5))
 
 # COMMAND ----------
 
@@ -49,7 +49,7 @@ house_df = (
         .filter(col('year') >= 2018)
         
 )
-display(house_df)
+display(house_df.limit(5))
 
 # COMMAND ----------
 
@@ -58,7 +58,7 @@ winner_df =(
     house_df
         .groupBy('year','state_po','district', 'candidate', 'party')
         .agg(max('candidatevotes').alias('votes'))
-        .orderBy(col('year'), col('state_po'), col('district'),col('votes').desc())
+        .orderBy('year', 'state_po', 'district', desc('votes'))
         .withColumn(
             'rank',
              rank().over(
@@ -77,7 +77,7 @@ winner_df =(
         .filter(col('rank') == 1)
 )
 
-display(winner_df)
+display(winner_df.limit(5))
 
 # COMMAND ----------
 
@@ -98,11 +98,11 @@ display(winner_2022_df)
 # DBTITLE 1,Drop candidate and year
 winner_joined_df = (
     winner_2018_df
-        .join(winner_2020_df, ['state_po', 'district'])
-        .join(winner_2022_df, ['state_po','district'])
+        .join(winner_2020_df, ['state_po', 'district'], how="outer")
+        .join(winner_2022_df, ['state_po','district'], how="outer")
         .drop('candidate', 'year')
 )
-display(winner_joined_df)
+winner_joined_df.display()
 
 # COMMAND ----------
 
