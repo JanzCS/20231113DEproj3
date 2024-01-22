@@ -105,8 +105,6 @@ wanted_cols = [
     "action_type_description",
     "record_type_code",
     "record_type_description",
-    "domestic_or_foreign_entity_code",
-    "domestic_or_foreign_entity",
     "foreign_funding",
     "domestic_or_foreign_entity_code",
     "domestic_or_foreign_entity",
@@ -134,14 +132,27 @@ contract = contract.select([col for col in wanted_cols if col in contract.column
 
 # COMMAND ----------
 
-display(assistance)
-display(contract)
-
-# COMMAND ----------
-
 from pyspark.sql.functions import lit
 
 # rename? (make sure that if columns are shared you rename to the same name)
 assistance = assistance.withColumnRenamed('assistance_transaction_unique_key', 'transaction_unique_key').withColumnRenamed('assistance_award_unique_key', 'award_unique_key').withColumn('award_type', lit('assistance'))
 contract = contract.withColumnRenamed('contract_transaction_unique_key', 'transaction_unique_key').withColumnRenamed('total_dollars_obligated', 'total_obligated_amount').withColumnRenamed('contract_award_unique_key', 'award_unique_key').withColumn('award_type', lit('contract'))
 
+
+# COMMAND ----------
+
+# load in files from bronze layer
+silver_cont_name = "silver-layer"
+storage_acct_name = "20231113desa"
+location_from_container = "usa_spending/"
+
+assistance_location = f"abfss://{silver_cont_name}@{storage_acct_name}.dfs.core.windows.net/{location_from_container}assistance"
+contract_location = f"abfss://{silver_cont_name}@{storage_acct_name}.dfs.core.windows.net/{location_from_container}contract"
+
+# two dataframes for each file type
+assistance.repartition(2).write.parquet(assistance_location)
+contract.repartition(2).write.parquet(contract_location)
+
+# external data processing
+# remove columns, rename, rorder
+# make sure tables are dimensionalized
