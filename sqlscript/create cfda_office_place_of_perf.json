@@ -1,0 +1,17 @@
+{
+	"name": "create cfda_office_place_of_perf",
+	"properties": {
+		"content": {
+			"query": "\n\n\n\nCREATE TABLE dbo.DimCFDA\n(\n    cfda_number VARCHAR(150) NOT NULL,\n    cfda_title VARCHAR(500)\n)\nWITH\n(\n    DISTRIBUTION = REPLICATE,\n    CLUSTERED COLUMNSTORE INDEX\n);\n\n\nCREATE TABLE dbo.DimOffice\n(\n    office_code VARCHAR(100),\n    office_name VARCHAR(200)\n) WITH (\n    DISTRIBUTION = REPLICATE,\n    CLUSTERED COLUMNSTORE INDEX\n);\n\nCREATE TABLE dbo.DimprimaryPlaceOfPerformanceScope\n(\n    primary_place_of_performance_scope VARCHAR(100),\n    primary_place_of_performance_scope_code BIGINT\n) WITH (\n    DISTRIBUTION = REPLICATE,\n    CLUSTERED COLUMNSTORE INDEX\n);\n\n\n\n\n",
+			"metadata": {
+				"language": "sql"
+			},
+			"currentConnection": {
+				"databaseName": "Project3DW",
+				"poolName": "Project3DW"
+			},
+			"resultLimit": 5000
+		},
+		"type": "SqlQuery"
+	}
+}
