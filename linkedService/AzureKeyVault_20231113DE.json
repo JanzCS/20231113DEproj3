@@ -1,0 +1,10 @@
+{
+	"name": "AzureKeyVault_20231113DE",
+	"properties": {
+		"annotations": [],
+		"type": "AzureKeyVault",
+		"typeProperties": {
+			"baseUrl": "https://SS-Databricks-Admin-KV.vault.azure.net/"
+		}
+	}
+}
