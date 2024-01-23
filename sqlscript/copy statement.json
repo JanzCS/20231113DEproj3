@@ -1,0 +1,17 @@
+{
+	"name": "copy statement",
+	"properties": {
+		"content": {
+			"query": "COPY INTO Prod.DimAgency\nFROM 'https://20231113desa.dfs.core.windows.net/gold-layer/project=3/usa_spending/agency/*.parquet'\nWITH (\n    FILE_TYPE = 'parquet',\n    CREDENTIAL = (IDENTITY='Managed Identity')\n)\n\nCOPY INTO Prod.DimCongressionalDistrict\nFROM 'https://20231113desa.dfs.core.windows.net/gold-layer/project=3/usa_spending/cd/*.parquet'\nWITH (\n    FILE_TYPE = 'parquet',\n    CREDENTIAL = (IDENTITY='Managed Identity')\n)\n\nCOPY INTO Prod.DimHighlyCompensatedOfficer\nFROM 'https://20231113desa.dfs.core.windows.net/gold-layer/project=3/usa_spending/hco/*.parquet'\nWITH (\n    FILE_TYPE = 'parquet',\n    CREDENTIAL = (IDENTITY='Managed Identity')\n)\n\nCOPY INTO Prod.DimCountry\nFROM 'https://20231113desa.dfs.core.windows.net/gold-layer/project=3/usa_spending/country/*.parquet'\nWITH (\n    FILE_TYPE = 'parquet',\n    CREDENTIAL = (IDENTITY='Managed Identity')\n)\n\nCOPY INTO Prod.DimRecipient\nFROM 'https://20231113desa.dfs.core.windows.net/gold-layer/project=3/usa_spending/recipient/*.parquet'\nWITH (\n    FILE_TYPE = 'parquet',\n    CREDENTIAL = (IDENTITY='Managed Identity')\n)\n\nCOPY INTO Prod.DimState\nFROM 'https://20231113desa.dfs.core.windows.net/gold-layer/project=3/usa_spending/state/*.parquet'\nWITH (\n    FILE_TYPE = 'parquet',\n    CREDENTIAL = (IDENTITY='Managed Identity')\n)\n\nCOPY INTO Prod.DimCounty\nFROM 'https://20231113desa.dfs.core.windows.net/gold-layer/project=3/usa_spending/county/*.parquet'\nWITH (\n    FILE_TYPE = 'parquet',\n    CREDENTIAL = (IDENTITY='Managed Identity')\n)\n\nCOPY INTO Prod.DimTime\nFROM 'https://20231113desa.dfs.core.windows.net/gold-layer/project=3/usa_spending/date/*.parquet'\nWITH (\n    FILE_TYPE = 'parquet',\n    CREDENTIAL = (IDENTITY='Managed Identity')\n)\n\nCOPY INTO Prod.FactAssistance\nFROM 'https://20231113desa.dfs.core.windows.net/gold-layer/project=3/usa_spending/assistance/*.parquet'\nWITH (\n    FILE_TYPE = 'parquet',\n    CREDENTIAL = (IDENTITY='Managed Identity')\n)\n\nCOPY INTO Prod.FactTransaction\nFROM 'https://20231113desa.dfs.core.windows.net/gold-layer/project=3/usa_spending/transaction/*.parquet'\nWITH (\n    FILE_TYPE = 'parquet',\n    CREDENTIAL = (IDENTITY='Managed Identity')\n)\n\n",
+			"metadata": {
+				"language": "sql"
+			},
+			"currentConnection": {
+				"databaseName": "Project3DW",
+				"poolName": "Project3DW"
+			},
+			"resultLimit": 5000
+		},
+		"type": "SqlQuery"
+	}
+}
