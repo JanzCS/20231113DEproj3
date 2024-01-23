@@ -29,9 +29,16 @@ cfda_dim = assistance_fact.select("cfda_number", "cfda_title")
 assistance_fact = assistance_fact.drop("cfda_title")
 
 # Primary Place of Performance Dimension
-primary_place_of_performance_scope_dim = assistance_fact.select('primary_place_of_performance_scope')
+primary_place_of_performance_scope_dim = assistance_fact.select('primary_place_of_performance_scope').distinct().dropna()
 primary_place_of_performance_scope_dim = primary_place_of_performance_scope_dim.select('*', monotonically_increasing_id().alias('primary_place_of_performance_scope_code'))
-assistance_fact = assistance_fact.join(how = 'left', on = (assistance_fact.primary_place_of_performance_scope == primary_place_of_performance_scope_dim.primary_place_of_performance_scope), other = primary_place_of_performance_scope_dim).drop('primary_place_of_performance_scope')
+
+assistance_fact.count()
+print('done')
+
+assistance_fact = assistance_fact.join(how = 'left', on = 'primary_place_of_performance_scope', other = primary_place_of_performance_scope_dim).drop('primary_place_of_performance_scope')
+
+assistance_fact.count()
+assistance_fact.explain()
 
 # COMMAND ----------
 
@@ -114,7 +121,7 @@ transaction_fact = transaction_fact.join(how = 'left', on = (transaction_fact.ob
 # do we want?
 
 # recipient - should add recipient location columns to this? 
-uei_dim = transaction_fact.select('recipient_uei', 'recipient_name_raw').distinct().dropna()
+recipient_dim = transaction_fact.select('recipient_uei', 'recipient_name_raw').distinct().dropna()
 transaction_fact = transaction_fact.drop('recipient_name_raw')
 
 # county
@@ -191,3 +198,48 @@ transaction_fact = transaction_fact.join(how = 'left', on = (transaction_fact.hi
 transaction_fact = transaction_fact.join(how = 'left', on = (transaction_fact.highly_compensated_officer_4_name == all_hco.hco_name), other = all_hco).withColumnRenamed('hco_code', 'highly_compensated_officer_4_code').drop('highly_compensated_officer_4_name', 'hco_name')
 
 transaction_fact = transaction_fact.join(how = 'left', on = (transaction_fact.highly_compensated_officer_5_name == all_hco.hco_name), other = all_hco).withColumnRenamed('hco_code', 'highly_compensated_officer_5_code').drop('highly_compensated_officer_5_name', 'hco_name')
+
+# COMMAND ----------
+
+# Write each table to gold layer
+gold_cont_name = "gold-layer"
+storage_acct_name = "20231113desa"
+location_from_container = "usa_spending/"
+location_stub = f"abfss://{gold_cont_name}@{storage_acct_name}.dfs.core.windows.net/{location_from_container}"
+
+assistance_fact_location = location_stub + 'assistance'
+transaction_fact_location = location_stub + 'transaction'
+
+business_types_dim_location = location_stub + 'business_types'
+cfda_dim_location = location_stub + 'cfda'
+primary_place_of_performance_scope_dim_location = location_stub + 'primary_place_of_performance_scope'
+
+time_dim_location = location_stub + 'date'
+agency_dim_location =  location_stub + 'agency'
+office_dim_location =  location_stub + 'office'
+object_class_dim_location = location_stub + 'object_class'
+recipient_dim_location = location_stub + 'recipient'
+county_dim_location = location_stub + 'county'
+cd_dim_location = location_stub + 'cd'
+state_dim_location = location_stub + 'state'
+country_dim_location = location_stub + 'country'
+hco_dim_location = location_stub + 'hco'
+
+# Write each table to gold layer
+assistance_fact.repartition(1).write.parquet(assistance_fact_location)
+transaction_fact.repartition(1).write.parquet(transaction_fact_location)
+
+business_types_dim.repartition(1).write.parquet(business_types_dim_location)
+cfda_dim.repartition(1).write.parquet(cfda_dim_location)
+primary_place_of_performance_scope_dim.repartition(1).write.parquet(primary_place_of_performance_scope_dim_location)
+
+time_dimension.repartition(1).write.parquet(time_dim_location)
+agency_dim.repartition(1).write.parquet(agency_dim_location)
+office_dim.repartition(1).write.parquet(office_dim_location)
+object_class_dim.repartition(1).write.parquet(object_class_dim_location)
+recipient_dim.repartition(1).write.parquet(recipient_dim_location)
+county_dim.repartition(1).write.parquet(county_dim_location)
+combined_cd.repartition(1).write.parquet(cd_dim_location)
+state_dim.repartition(1).write.parquet(state_dim_location)
+country_dim.repartition(1).write.parquet(country_dim_location)
+all_hco.repartition(1).write.parquet(hco_dim_location)

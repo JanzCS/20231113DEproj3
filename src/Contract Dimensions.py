@@ -15,10 +15,6 @@ contract = spark.read.parquet(contract_location, header=True, inferSchema=True)
 
 # COMMAND ----------
 
-display(contract)
-
-# COMMAND ----------
-
 # MAGIC %md
 # MAGIC ## Dimension tables
 
@@ -57,10 +53,6 @@ business_size = business_size.dropna(subset=['business_size_key'])
 
 # COMMAND ----------
 
-business_size.display()
-
-# COMMAND ----------
-
 # MAGIC %md
 # MAGIC ### Humanitarian 
 
@@ -84,8 +76,6 @@ humanitarian_or_peacekeeping = humanitarian_or_peacekeeping\
     .withColumnRenamed('contingency_humanitarian_or_peacekeeping_operation', 'humanitarian_or_peacekeeping_operation')
 humanitarian_or_peacekeeping = humanitarian_or_peacekeeping.select('humanitarian_or_peacekeeping_key', 'humanitarian_or_peacekeeping_code', 'humanitarian_or_peacekeeping_operation')
 
-humanitarian_or_peacekeeping.display()
-
 # COMMAND ----------
 
 # MAGIC %md
@@ -108,8 +98,6 @@ contract = contract.drop('place_of_manufacture_code', 'place_of_manufacture')
 #Reorder columns 
 place_of_manufacture = place_of_manufacture.select('place_of_manufacture_key', 'place_of_manufacture_code', 'place_of_manufacture')
 
-display(place_of_manufacture)
-
 # COMMAND ----------
 
 # MAGIC %md
@@ -131,8 +119,6 @@ contract = contract.drop('domestic_or_foreign_entity_code', 'domestic_or_foreign
 
 #Reorder columns 
 domestic_or_foreign_entity = domestic_or_foreign_entity.select('domestic_or_foreign_entity_key', 'domestic_or_foreign_entity_code', 'domestic_or_foreign_entity')
-
-display(domestic_or_foreign_entity)
 
 # COMMAND ----------
 
@@ -158,8 +144,6 @@ naics = naics.select('naics_key', 'naics_code', 'naics_description')
 #Join new unique key into fact table and remove columns
 contract = contract.join(naics, ['naics_code', 'naics_description'])
 contract = contract.drop('naics_code', 'naics_description')
-
-display(naics)
 
 # COMMAND ----------
 
@@ -190,8 +174,6 @@ country_of_origin = country_of_origin\
     .withColumnRenamed('country_of_product_or_service_origin', 'country_of_origin')
 country_of_origin = country_of_origin.select('country_of_origin_key', 'country_of_origin_code', 'country_of_origin')
 
-country_of_origin.display()
-
 # COMMAND ----------
 
 # MAGIC %md
@@ -215,8 +197,6 @@ contract = contract.drop('foreign_funding', 'foreign_funding_description')
 foreign_funding = foreign_funding.withColumnRenamed('foreign_funding', 'foreign_funding_code')\
     .select('foreign_funding_key', 'foreign_funding_code', 'foreign_funding_description')
 
-display(foreign_funding)
-
 # COMMAND ----------
 
 # MAGIC %md
@@ -239,8 +219,6 @@ contract = contract.drop('product_or_service_code', 'product_or_service_code_des
 #Reorder columns
 product_or_service = product_or_service.select('product_or_service_key', 'product_or_service_code', 'product_or_service_code_description')
 
-display(product_or_service)
-
 # COMMAND ----------
 
 # MAGIC %md
@@ -248,7 +226,7 @@ display(product_or_service)
 
 # COMMAND ----------
 
-contract.select('transaction_unique_key', 
+contract = contract.select('transaction_unique_key', 
                 'naics_key', 
                 'place_of_manufacture_key', 
                 'country_of_origin_key',
@@ -256,8 +234,39 @@ contract.select('transaction_unique_key',
                 'business_size_key',
                 'foreign_funding_key',
                 'product_or_service_key',
-                'domestic_or_foreign_entity_key').display()
+                'domestic_or_foreign_entity_key')
 
 # COMMAND ----------
 
+contract.display()
 
+# COMMAND ----------
+
+# Write each table to gold layer
+gold_cont_name = "gold-layer"
+storage_acct_name = "20231113desa"
+location_from_container = "usa_spending/"
+location_stub = f"abfss://{gold_cont_name}@{storage_acct_name}.dfs.core.windows.net/{location_from_container}"
+
+contract_fact_location = location_stub + 'contract'
+
+business_size_dim_location = location_stub + 'business_size'
+humanitarian_or_peacekeeping_dim_location = location_stub + 'humanitarian_or_peacekeeping'
+place_of_manufacture_dim_location = location_stub + 'place_of_manufacture'
+domestic_or_foreign_entity_dim_location = location_stub + 'domestic_or_foreign_entity'
+naics_dim_location = location_stub + 'naics'
+country_of_origin_dim_location = location_stub + 'country_of_origin'
+foreign_funding_dim_location = location_stub + 'foreign_funding'
+product_or_service_dim_location = location_stub + 'product_or_service'
+
+# Write each table to gold layer
+contract.repartition(1).write.parquet(contract_fact_location)
+
+business_size.repartition(1).write.parquet(business_size_dim_location)
+humanitarian_or_peacekeeping.repartition(1).write.parquet(humanitarian_or_peacekeeping_dim_location)
+place_of_manufacture.repartition(1).write.parquet(place_of_manufacture_dim_location)
+domestic_or_foreign_entity.repartition(1).write.parquet(domestic_or_foreign_entity_dim_location)
+naics.repartition(1).write.parquet(naics_dim_location)
+country_of_origin.repartition(1).write.parquet(country_of_origin_dim_location)
+foreign_funding.repartition(1).write.parquet(foreign_funding_dim_location)
+product_or_service.repartition(1).write.parquet(product_or_service_dim_location)
