@@ -43,7 +43,6 @@ wanted_cols = [
     "funding_agency_name",
     "funding_office_code",
     "funding_office_name",
-    "object_classes_funding_this_award",
     "program_activities_funding_this_award",
     "recipient_uei",
     "recipient_name_raw",
@@ -72,14 +71,10 @@ wanted_cols = [
     "cfda_title",
     "naics_code",
     "naics_description",
-    "place_of_manufacture_code",
-    "place_of_manufacture",
     "country_of_product_or_service_origin_code",
     "country_of_product_or_service_origin",
     "contracting_officers_determination_of_business_size",
     "contracting_officers_determination_of_business_size_code",
-    "business_types_code",
-    "business_types_description",
     "correction_delete_indicator_code",
     "correction_delete_indicator_description",
     "action_type_code",
@@ -87,8 +82,6 @@ wanted_cols = [
     "record_type_code",
     "record_type_description",
     "foreign_funding",
-    "domestic_or_foreign_entity_code",
-    "domestic_or_foreign_entity",
     "highly_compensated_officer_1_name",
     "highly_compensated_officer_1_amount",
     "highly_compensated_officer_2_name",
@@ -130,6 +123,152 @@ contract = (
     .withColumnRenamed("contract_award_unique_key", "award_unique_key")
     .withColumn("award_type", lit("contract"))
 )
+
+# COMMAND ----------
+
+from pyspark.sql.types import DecimalType
+from pyspark.sql.functions import col
+
+# Fix monetary value columns to be decimal types
+
+assistance = (
+    assistance.withColumn(
+        "federal_action_obligation",
+        col("federal_action_obligation").cast(DecimalType(18, 2)),
+    )
+    .withColumn(
+        "total_obligated_amount", col("total_obligated_amount").cast(DecimalType(18, 2))
+    )
+    .withColumn(
+        "total_outlayed_amount_for_overall_award",
+        col("total_outlayed_amount_for_overall_award").cast(DecimalType(18, 2)),
+    )
+    .withColumn(
+        "face_value_of_loan", col("face_value_of_loan").cast(DecimalType(18, 2))
+    )
+    .withColumn(
+        "original_loan_subsidy_cost",
+        col("original_loan_subsidy_cost").cast(DecimalType(18, 2)),
+    )
+    .withColumn(
+        "total_face_value_of_loan",
+        col("total_face_value_of_loan").cast(DecimalType(18, 2)),
+    )
+    .withColumn(
+        "total_loan_subsidy_cost",
+        col("total_loan_subsidy_cost").cast(DecimalType(18, 2)),
+    )
+    .withColumn(
+        "highly_compensated_officer_1_amount",
+        col("highly_compensated_officer_1_amount").cast(DecimalType(18, 2)),
+    )
+    .withColumn(
+        "highly_compensated_officer_2_amount",
+        col("highly_compensated_officer_2_amount").cast(DecimalType(18, 2)),
+    )
+    .withColumn(
+        "highly_compensated_officer_3_amount",
+        col("highly_compensated_officer_3_amount").cast(DecimalType(18, 2)),
+    )
+    .withColumn(
+        "highly_compensated_officer_4_amount",
+        col("highly_compensated_officer_4_amount").cast(DecimalType(18, 2)),
+    )
+    .withColumn(
+        "highly_compensated_officer_5_amount",
+        col("highly_compensated_officer_5_amount").cast(DecimalType(18, 2)),
+    )
+)
+
+contract = (
+    contract.withColumn(
+        "federal_action_obligation",
+        col("federal_action_obligation").cast(DecimalType(18, 2)),
+    )
+    .withColumn(
+        "total_obligated_amount", col("total_obligated_amount").cast(DecimalType(18, 2))
+    )
+    .withColumn(
+        "total_outlayed_amount_for_overall_award",
+        col("total_outlayed_amount_for_overall_award").cast(DecimalType(18, 2)),
+    )
+    .withColumn(
+        "outlayed_amount_from_COVID-19_supplementals_for_overall_award",
+        col("outlayed_amount_from_COVID-19_supplementals_for_overall_award").cast(
+            DecimalType(18, 2)
+        ),
+    )
+    .withColumn(
+        "obligated_amount_from_COVID-19_supplementals_for_overall_award",
+        col("obligated_amount_from_COVID-19_supplementals_for_overall_award").cast(
+            DecimalType(18, 2)
+        ),
+    )
+    .withColumn(
+        "highly_compensated_officer_1_amount",
+        col("highly_compensated_officer_1_amount").cast(DecimalType(18, 2)),
+    )
+    .withColumn(
+        "highly_compensated_officer_2_amount",
+        col("highly_compensated_officer_2_amount").cast(DecimalType(18, 2)),
+    )
+    .withColumn(
+        "highly_compensated_officer_3_amount",
+        col("highly_compensated_officer_3_amount").cast(DecimalType(18, 2)),
+    )
+    .withColumn(
+        "highly_compensated_officer_4_amount",
+        col("highly_compensated_officer_4_amount").cast(DecimalType(18, 2)),
+    )
+    .withColumn(
+        "highly_compensated_officer_5_amount",
+        col("highly_compensated_officer_5_amount").cast(DecimalType(18, 2)),
+    )
+)
+
+# Drop any rows that have no monetary value columns or a primary key
+
+assistance = assistance.dropna(
+    how="all",
+    subset=[
+        "federal_action_obligation",
+        "total_obligated_amount",
+        "total_outlayed_amount_for_overall_award",
+        "face_value_of_loan",
+        "original_loan_subsidy_cost",
+        "total_face_value_of_loan",
+        "total_loan_subsidy_cost",
+        "highly_compensated_officer_1_amount",
+        "highly_compensated_officer_2_amount",
+        "highly_compensated_officer_3_amount",
+        "highly_compensated_officer_4_amount",
+        "highly_compensated_officer_5_amount",
+    ],
+)
+
+contract = contract.dropna(
+    how="all",
+    subset=[
+        "federal_action_obligation",
+        "total_obligated_amount",
+        "total_outlayed_amount_for_overall_award",
+        "outlayed_amount_from_COVID-19_supplementals_for_overall_award",
+        "obligated_amount_from_COVID-19_supplementals_for_overall_award",
+        "highly_compensated_officer_1_amount",
+        "highly_compensated_officer_2_amount",
+        "highly_compensated_officer_3_amount",
+        "highly_compensated_officer_4_amount",
+        "highly_compensated_officer_5_amount",
+    ],
+)
+
+assistance = assistance.dropna(subset=["transaction_unique_key"])
+contract = contract.dropna(subset=["transaction_unique_key"])
+
+assistance_expr = '.+_.+_.+_.+_.+'
+contract_expr = '.+_.+_.+_.+_.+_.+'
+assistance = assistance.filter(assistance['transaction_unique_key'].rlike(assistance_expr))
+contract = contract.filter(contract['transaction_unique_key'].rlike(contract_expr))
 
 # COMMAND ----------
 

@@ -24,25 +24,27 @@ contract = spark.read.parquet(contract_location)
 
 # Assistance Fact
 assistance_fact = assistance.select(
+    "transaction_unique_key",
+    "award_unique_key",
     "cfda_number",
     "cfda_title",
     "face_value_of_loan",
     "total_face_value_of_loan",
     "original_loan_subsidy_cost",
     "total_loan_subsidy_cost",
-    "business_types_code",
-    "business_types_description",
+    # "business_types_code",
+    # "business_types_description",
     "primary_place_of_performance_scope",
 )
 
-# Business Types Dimension
-business_types_dim = assistance_fact.select(
-    "business_types_code", "business_types_description"
-)
-assistance_fact.drop("business_types_description")
+# # Business Types Dimension
+# business_types_dim = assistance_fact.select(
+#     "business_types_code", "business_types_description"
+# ).distinct().dropna()
+# assistance_fact = assistance_fact.drop("business_types_description")
 
 # CFDA Dimension
-cfda_dim = assistance_fact.select("cfda_number", "cfda_title")
+cfda_dim = assistance_fact.select("cfda_number", "cfda_title").distinct().dropna()
 assistance_fact = assistance_fact.drop("cfda_title")
 
 # Primary Place of Performance Dimension
@@ -53,17 +55,11 @@ primary_place_of_performance_scope_dim = primary_place_of_performance_scope_dim.
     "*", monotonically_increasing_id().alias("primary_place_of_performance_scope_code")
 )
 
-assistance_fact.count()
-print("done")
-
 assistance_fact = assistance_fact.join(
     how="left",
     on="primary_place_of_performance_scope",
     other=primary_place_of_performance_scope_dim,
 ).drop("primary_place_of_performance_scope")
-
-assistance_fact.count()
-assistance_fact.explain()
 
 # COMMAND ----------
 
@@ -161,24 +157,21 @@ funding_office_list = (
 office_dim = awarding_office_list.union(funding_office_list).distinct().dropna()
 transaction_fact = transaction_fact.drop("awarding_office_name", "funding_office_name")
 
-# object_class
-object_class_dim = (
-    transaction_fact.select("object_classes_funding_this_award").distinct().dropna()
-)
-object_class_dim = object_class_dim.select(
-    "*", monotonically_increasing_id().alias("object_class_code")
-)
-transaction_fact = transaction_fact.join(
-    how="left",
-    on=(
-        transaction_fact.object_classes_funding_this_award
-        == object_class_dim.object_classes_funding_this_award
-    ),
-    other=object_class_dim,
-).drop("object_classes_funding_this_award")
-
-# disaster_emergency_funds
-# do we want?
+# # object_class
+# object_class_dim = (
+#     transaction_fact.select("object_classes_funding_this_award").distinct().dropna()
+# )
+# object_class_dim = object_class_dim.select(
+#     "*", monotonically_increasing_id().alias("object_class_code")
+# # )
+# transaction_fact = transaction_fact.join(
+#     how="left",
+#     on=(
+#         transaction_fact.object_classes_funding_this_award
+#         == object_class_dim.object_classes_funding_this_award
+#     ),
+#     other=object_class_dim,
+# ).drop("object_classes_funding_this_award")
 
 # recipient - should add recipient location columns to this?
 recipient_dim = (
@@ -187,7 +180,6 @@ recipient_dim = (
 transaction_fact = transaction_fact.drop("recipient_name_raw")
 
 # county
-# need to add external data
 recipient_county = (
     transaction_fact.select(
         "prime_award_transaction_recipient_county_fips_code", "recipient_county_name"
@@ -236,7 +228,6 @@ county_dim = county_dim.join(pres_ext, on="county_fips")
 county_dim = county_dim.drop("county_name", "county", "state")
 
 # congressional_district
-# add external data
 recipient_cd = transaction_fact.select(
     "prime_award_transaction_recipient_cd_original"
 ).withColumnRenamed("prime_award_transaction_recipient_cd_original", "cd_original")
@@ -424,22 +415,22 @@ country_dim_location = location_stub + "country"
 hco_dim_location = location_stub + "hco"
 
 # Write each table to gold layer
-assistance_fact.repartition(1).write.parquet(assistance_fact_location)
-transaction_fact.repartition(1).write.parquet(transaction_fact_location)
+assistance_fact.repartition(1).write.mode('overwrite').parquet(assistance_fact_location)
+transaction_fact.repartition(1).write.mode('overwrite').parquet(transaction_fact_location)
 
-business_types_dim.repartition(1).write.parquet(business_types_dim_location)
-cfda_dim.repartition(1).write.parquet(cfda_dim_location)
-primary_place_of_performance_scope_dim.repartition(1).write.parquet(
+# business_types_dim.repartition(1).write.parquet(business_types_dim_location)
+cfda_dim.repartition(1).write.mode('overwrite').parquet(cfda_dim_location)
+primary_place_of_performance_scope_dim.repartition(1).write.mode('overwrite').parquet(
     primary_place_of_performance_scope_dim_location
 )
 
-time_dimension.repartition(1).write.parquet(time_dim_location)
-agency_dim.repartition(1).write.parquet(agency_dim_location)
-office_dim.repartition(1).write.parquet(office_dim_location)
-object_class_dim.repartition(1).write.parquet(object_class_dim_location)
-recipient_dim.repartition(1).write.parquet(recipient_dim_location)
-county_dim.repartition(1).write.parquet(county_dim_location)
-combined_cd.repartition(1).write.parquet(cd_dim_location)
-state_dim.repartition(1).write.parquet(state_dim_location)
-country_dim.repartition(1).write.parquet(country_dim_location)
-all_hco.repartition(1).write.parquet(hco_dim_location)
+time_dimension.repartition(1).write.mode('overwrite').parquet(time_dim_location)
+agency_dim.repartition(1).write.mode('overwrite').parquet(agency_dim_location)
+office_dim.repartition(1).write.mode('overwrite').parquet(office_dim_location)
+# object_class_dim.repartition(1).write.parquet(object_class_dim_location)
+recipient_dim.repartition(1).write.mode('overwrite').parquet(recipient_dim_location)
+county_dim.repartition(1).write.mode('overwrite').parquet(county_dim_location)
+combined_cd.repartition(1).write.mode('overwrite').parquet(cd_dim_location)
+state_dim.repartition(1).write.mode('overwrite').parquet(state_dim_location)
+country_dim.repartition(1).write.mode('overwrite').parquet(country_dim_location)
+all_hco.repartition(1).write.mode('overwrite').parquet(hco_dim_location)
