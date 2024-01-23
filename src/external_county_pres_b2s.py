@@ -11,11 +11,6 @@ county_pres = spark.read.csv(county_pres_location, header=True, inferSchema=True
 
 # COMMAND ----------
 
-# MAGIC %md
-# MAGIC ### 1. Process country president
-
-# COMMAND ----------
-
 from pyspark.sql.functions import lpad
 # Change column types
 county_pres = county_pres.withColumn('year', county_pres.year.cast('integer'))\
@@ -62,15 +57,9 @@ county_pres = county_pres.withColumnRenamed('2016', '2016_party').withColumnRena
 
 # COMMAND ----------
 
-display(county_pres)
-
-# COMMAND ----------
-
 silver_cont_name = "silver-layer"
-storage_acct_name = "20231113desa"
-location_from_container = "usa_spending/"
+location_from_container = "project=3/usa_spending/"
 
 external_location = f"abfss://{silver_cont_name}@{storage_acct_name}.dfs.core.windows.net/{location_from_container}external/county/pres"
 
-# two dataframes for each file type
 county_pres.repartition(1).write.parquet(external_location)
