@@ -1,0 +1,18 @@
+{
+	"$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentParameters.json#",
+	"contentVersion": "1.0.0.0",
+	"parameters": {
+		"workspaceName": {
+			"value": "20231113-synapse-workspace"
+		},
+		"20231113-synapse-workspace-WorkspaceDefaultSqlServer_connectionString": {
+			"value": "Integrated Security=False;Encrypt=True;Connection Timeout=30;Data Source=tcp:20231113-synapse-workspace.sql.azuresynapse.net,1433;Initial Catalog=@{linkedService().DBName}"
+		},
+		"20231113-synapse-workspace-WorkspaceDefaultStorage_properties_typeProperties_url": {
+			"value": "https://20231113desa.dfs.core.windows.net"
+		},
+		"AzureKeyVault_20231113DE_properties_typeProperties_baseUrl": {
+			"value": "https://SS-Databricks-Admin-KV.vault.azure.net/"
+		}
+	}
+}
