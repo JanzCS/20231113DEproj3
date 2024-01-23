@@ -1,0 +1,29 @@
+{
+	"name": "AzureDatabricks",
+	"properties": {
+		"annotations": [],
+		"type": "AzureDatabricks",
+		"typeProperties": {
+			"domain": "https://adb-5965024747360233.13.azuredatabricks.net",
+			"authentication": "MSI",
+			"workspaceResourceId": "/subscriptions/8d12a595-ad13-41df-bf17-0a5b9ad7aa90/resourceGroups/SkillStorm_DataBricks/providers/Microsoft.Databricks/workspaces/Databricks_Workspace",
+			"newClusterNodeType": "Standard_DS3_v2",
+			"newClusterNumOfWorker": "1:6",
+			"newClusterSparkConf": {
+				"fs.azure.account.oauth2.client.id.sssynapsesa.dfs.core.windows.net": "de4ff859-02b1-4e2f-9d16-b578fa03df4f",
+				"fs.azure.account.oauth2.client.endpoint.sssynapsesa.dfs.core.windows.net": "https://login.microsoftonline.com/33da9f3f-4c1a-4640-8ce1-3f63024aea1d/oauth2/token",
+				"fs.azure.account.auth.type.sssynapsesa.dfs.core.windows.net": "OAuth",
+				"fs.azure.account.oauth2.client.secret.sssynapsesa.dfs.core.windows.net": "{{secrets/databricks-app-kv/20231113desa-key}}",
+				"fs.azure.account.oauth.provider.type.sssynapsesa.dfs.core.windows.net": "org.apache.hadoop.fs.azurebfs.oauth2.ClientCredsTokenProvider",
+				"mapreduce.fileoutputcommitter.marksuccessfuljobs": "false",
+				"spark.sql.sources.commitProtocolClass": "org.apache.spark.sql.execution.datasources.SQLHadoopMapReduceCommitProtocol"
+			},
+			"newClusterSparkEnvVars": {
+				"PYSPARK_PYTHON": "/databricks/python3/bin/python3"
+			},
+			"newClusterVersion": "14.2.x-scala2.12",
+			"clusterOption": "Autoscaling",
+			"newClusterInitScripts": []
+		}
+	}
+}
