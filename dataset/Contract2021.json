@@ -1,0 +1,20 @@
+{
+	"name": "Contract2021",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "UsaSpending Award Data Archve",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "Binary",
+		"typeProperties": {
+			"location": {
+				"type": "HttpServerLocation",
+				"relativeUrl": "FY2021_All_Contracts_Full_20240122.zip"
+			},
+			"compression": {
+				"type": "ZipDeflate"
+			}
+		}
+	}
+}
