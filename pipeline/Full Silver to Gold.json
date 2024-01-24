@@ -3,7 +3,7 @@
 	"properties": {
 		"activities": [
 			{
-				"name": "Silver to Gold",
+				"name": "Assistance-Transaction_S2G",
 				"description": "Run silver to gold notebook to run all of the transformations",
 				"type": "DatabricksNotebook",
 				"dependsOn": [],
@@ -17,6 +17,26 @@
 				"userProperties": [],
 				"typeProperties": {
 					"notebookPath": "/Repos/paul.spadaccini@skillstormnextgen.onmicrosoft.com/20231113DEproj3/src/transaction_assistance_s2g"
+				},
+				"linkedServiceName": {
+					"referenceName": "AzureDatabricks",
+					"type": "LinkedServiceReference"
+				}
+			},
+			{
+				"name": "Contract_S2G",
+				"type": "DatabricksNotebook",
+				"dependsOn": [],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"notebookPath": "/Repos/paul.spadaccini@skillstormnextgen.onmicrosoft.com/20231113DEproj3/src/Contract Dimensions"
 				},
 				"linkedServiceName": {
 					"referenceName": "AzureDatabricks",
