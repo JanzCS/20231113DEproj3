@@ -14,18 +14,19 @@
 						]
 					}
 				],
-				"userProperties": [
-					{
-						"name": "test",
-						"value": "123"
-					}
-				],
+				"userProperties": [],
 				"typeProperties": {
 					"pipeline": {
 						"referenceName": "Yearly B2S",
 						"type": "PipelineReference"
 					},
-					"waitOnCompletion": true
+					"waitOnCompletion": true,
+					"parameters": {
+						"year": {
+							"value": "@pipeline().parameters.year",
+							"type": "Expression"
+						}
+					}
 				}
 			},
 			{
@@ -43,10 +44,10 @@
 				}
 			}
 		],
-		"variables": {
+		"parameters": {
 			"year": {
-				"type": "String",
-				"defaultValue": "@variables('year')"
+				"type": "string",
+				"defaultValue": "2023"
 			}
 		},
 		"annotations": []

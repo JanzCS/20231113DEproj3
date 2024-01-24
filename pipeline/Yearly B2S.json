@@ -19,7 +19,7 @@
 					"notebookPath": "/Repos/paul.spadaccini@skillstormnextgen.onmicrosoft.com/20231113DEproj3/src/bronze_to_silver_incremental",
 					"baseParameters": {
 						"year": {
-							"value": "@variables('year')",
+							"value": "@pipeline().parameters.year",
 							"type": "Expression"
 						}
 					}
@@ -30,6 +30,11 @@
 				}
 			}
 		],
+		"parameters": {
+			"year": {
+				"type": "string"
+			}
+		},
 		"variables": {
 			"year": {
 				"type": "String",
