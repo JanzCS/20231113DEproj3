@@ -1,0 +1,27 @@
+{
+	"name": "Test",
+	"properties": {
+		"activities": [
+			{
+				"name": "Assistance and Transaction B2S",
+				"description": "Run the bronze to silver pipeline to add new data to the silver layer",
+				"type": "ExecutePipeline",
+				"dependsOn": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "Yearly B2S",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true
+				}
+			}
+		],
+		"variables": {
+			"year": {
+				"type": "String",
+				"defaultValue": "2023"
+			}
+		},
+		"annotations": []
+	}
+}
