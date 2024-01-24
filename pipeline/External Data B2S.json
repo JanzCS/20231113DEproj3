@@ -1,0 +1,136 @@
+{
+	"name": "External Data B2S",
+	"properties": {
+		"activities": [
+			{
+				"name": "External CD House B2S",
+				"type": "DatabricksNotebook",
+				"dependsOn": [],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"notebookPath": "/Repos/paul.spadaccini@skillstormnextgen.onmicrosoft.com/20231113DEproj3/src/external_cd_house_b2s"
+				},
+				"linkedServiceName": {
+					"referenceName": "AzureDatabricks",
+					"type": "LinkedServiceReference"
+				}
+			},
+			{
+				"name": "External County Education B2S",
+				"type": "DatabricksNotebook",
+				"dependsOn": [
+					{
+						"activity": "External CD House B2S",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"notebookPath": "/Repos/paul.spadaccini@skillstormnextgen.onmicrosoft.com/20231113DEproj3/src/external_county_education_b2s"
+				},
+				"linkedServiceName": {
+					"referenceName": "AzureDatabricks",
+					"type": "LinkedServiceReference"
+				}
+			},
+			{
+				"name": "External County GDP B2S",
+				"type": "DatabricksNotebook",
+				"dependsOn": [
+					{
+						"activity": "External County Education B2S",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"notebookPath": "/Repos/paul.spadaccini@skillstormnextgen.onmicrosoft.com/20231113DEproj3/src/external_county_gdp_b2s"
+				},
+				"linkedServiceName": {
+					"referenceName": "AzureDatabricks",
+					"type": "LinkedServiceReference"
+				}
+			},
+			{
+				"name": "External County Population B2S",
+				"type": "DatabricksNotebook",
+				"dependsOn": [
+					{
+						"activity": "External County GDP B2S",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"notebookPath": "/Repos/paul.spadaccini@skillstormnextgen.onmicrosoft.com/20231113DEproj3/src/external_county_pop_est_b2s"
+				},
+				"linkedServiceName": {
+					"referenceName": "AzureDatabricks",
+					"type": "LinkedServiceReference"
+				}
+			},
+			{
+				"name": "External County Presidential B2S",
+				"type": "DatabricksNotebook",
+				"dependsOn": [
+					{
+						"activity": "External County Population B2S",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"notebookPath": "/Repos/paul.spadaccini@skillstormnextgen.onmicrosoft.com/20231113DEproj3/src/external_county_pres_b2s"
+				},
+				"linkedServiceName": {
+					"referenceName": "AzureDatabricks",
+					"type": "LinkedServiceReference"
+				}
+			}
+		],
+		"annotations": []
+	}
+}
