@@ -1,0 +1,18 @@
+{
+	"name": "contract_full",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "20231113-synapse-workspace-WorkspaceDefaultStorage",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "Binary",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobFSLocation",
+				"folderPath": "usa_spending/contract_full",
+				"fileSystem": "landing-zone"
+			}
+		}
+	}
+}
