@@ -1,5 +1,5 @@
 {
-	"name": "DestinationDataset_ykj",
+	"name": "assistance_full",
 	"properties": {
 		"linkedServiceName": {
 			"referenceName": "20231113-synapse-workspace-WorkspaceDefaultStorage",
@@ -10,7 +10,7 @@
 		"typeProperties": {
 			"location": {
 				"type": "AzureBlobFSLocation",
-				"folderPath": "usa_spending/test_api",
+				"folderPath": "usa_spending/assistance_full",
 				"fileSystem": "landing-zone"
 			}
 		}
