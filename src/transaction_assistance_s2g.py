@@ -389,6 +389,23 @@ transaction_fact = (
 
 # COMMAND ----------
 
+# MAGIC %md
+# MAGIC ### Implement partitioning
+# MAGIC - Assistance 10 Million rows/ 256 MB
+# MAGIC - Transaction 4.3 Million rows/ 256 MB
+
+# COMMAND ----------
+
+import math
+
+assistance_num_rows = assistance_fact.count()
+transaction_num_rows = transaction_fact.count()
+
+assistance_num_partitions = math.ceil(assistance_num_rows / 10000000)
+transaction_num_partitions = math.ceil(transaction_num_rows / 4300000)
+
+# COMMAND ----------
+
 # Write each table to gold layer
 gold_cont_name = "gold-layer"
 location_from_container = "project=3/usa_spending/"
@@ -415,8 +432,8 @@ country_dim_location = location_stub + "country"
 hco_dim_location = location_stub + "hco"
 
 # Write each table to gold layer
-assistance_fact.repartition(1).write.mode('overwrite').parquet(assistance_fact_location)
-transaction_fact.repartition(1).write.mode('overwrite').parquet(transaction_fact_location)
+assistance_fact.repartition(assistance_num_partitions).write.mode('overwrite').parquet(assistance_fact_location)
+transaction_fact.repartition(transaction_num_partitions).write.mode('overwrite').parquet(transaction_fact_location)
 
 # business_types_dim.repartition(1).write.parquet(business_types_dim_location)
 cfda_dim.repartition(1).write.mode('overwrite').parquet(cfda_dim_location)

@@ -331,6 +331,19 @@ contract = contract.select(
 
 # COMMAND ----------
 
+# MAGIC %md
+# MAGIC ### Implement partitioning
+# MAGIC - 11 Milion rows/ 256 MB
+
+# COMMAND ----------
+
+import math
+
+contract_num_rows = contract.count()
+contract_num_partitions = math.ceil(contract_num_rows / 11000000)
+
+# COMMAND ----------
+
 # Write each table to gold layer
 gold_cont_name = "gold-layer"
 storage_acct_name = "20231113desa"
@@ -351,7 +364,7 @@ foreign_funding_dim_location = location_stub + "foreign_funding"
 product_or_service_dim_location = location_stub + "product_or_service"
 
 # Write each table to gold layer
-contract.repartition(1).write.mode('overwrite').parquet(contract_fact_location)
+contract.repartition(contract_num_partitions).write.mode('overwrite').parquet(contract_fact_location)
 business_size.repartition(1).write.mode('overwrite').parquet(business_size_dim_location)
 # humanitarian_or_peacekeeping.repartition(1).write.parquet(
 #     humanitarian_or_peacekeeping_dim_location

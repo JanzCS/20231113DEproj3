@@ -272,6 +272,23 @@ contract = contract.filter(contract['transaction_unique_key'].rlike(contract_exp
 
 # COMMAND ----------
 
+# MAGIC %md
+# MAGIC ### Implement partitioning
+# MAGIC - Assistance - 3.5 Million rows / 256MB
+# MAGIC - Contract - 2.5 million rows / 256MB
+
+# COMMAND ----------
+
+import math
+
+assistance_num_rows = assistance.count()
+contract_num_rows = contract.count()
+
+assistance_num_partitions = math.ceil(assistance_num_rows / 3500000)
+contract_num_partitions = math.ceil(contract_num_rows / 2500000)
+
+# COMMAND ----------
+
 # Set up locations to write to silver layer
 silver_cont_name = "silver-layer"
 location_from_container = "project=3/usa_spending/"
@@ -280,5 +297,5 @@ assistance_location = f"abfss://{silver_cont_name}@{storage_acct_name}.dfs.core.
 contract_location = f"abfss://{silver_cont_name}@{storage_acct_name}.dfs.core.windows.net/{location_from_container}contract"
 
 # Dataframe for each file type
-assistance.repartition(1).write.mode('overwrite').parquet(assistance_location)
-contract.repartition(1).write.mode('overwrite').parquet(contract_location)
+assistance.repartition(assistance_num_partitions).write.mode('overwrite').parquet(assistance_location)
+contract.repartition(contract_num_partitions).write.mode('overwrite').parquet(contract_location)
