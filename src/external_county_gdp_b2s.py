@@ -66,6 +66,39 @@ gdp_combined = selected_data.join(
 
 # COMMAND ----------
 
+from pyspark.sql.functions import col, regexp_replace
+from pyspark.sql.types import IntegerType
+
+# Remove commas and change fields from string to int
+gdp_combined = (
+    gdp_combined.withColumn(
+        "gdp_2019",
+        regexp_replace("gdp_2019", ",", "").cast(
+            IntegerType()
+        ),
+    )
+    .withColumn(
+        "gdp_2020",
+        regexp_replace("gdp_2020", ",", "").cast(
+            IntegerType()
+        ),
+    )
+    .withColumn(
+        "gdp_2021",
+        regexp_replace("gdp_2021", ",", "").cast(
+            IntegerType()
+        ),
+    )
+    .withColumn(
+        "gdp_2022",
+        regexp_replace("gdp_2022", ",", "").cast(
+            IntegerType()
+        ),
+    )
+)
+
+# COMMAND ----------
+
 silver_cont_name = "silver-layer"
 storage_acct_name = "20231113desa"
 location_from_container = "project=3/usa_spending/"
