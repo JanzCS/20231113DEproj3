@@ -285,18 +285,6 @@ contract = contract.filter(contract['transaction_unique_key'].rlike(contract_exp
 
 # COMMAND ----------
 
-def file_exists(path):
-  try:
-    dbutils.fs.ls(path)
-    return True
-  except Exception as e:
-    if 'java.io.FileNotFoundException' in str(e):
-      return False
-    else:
-      raise
-
-# COMMAND ----------
-
 # Set up locations to write to silver layer
 silver_cont_name = "silver-layer"
 location_from_container = "project=3/usa_spending/"
@@ -304,34 +292,17 @@ location_from_container = "project=3/usa_spending/"
 assistance_location = f"abfss://{silver_cont_name}@{storage_acct_name}.dfs.core.windows.net/{location_from_container}assistance/abc"
 contract_location = f"abfss://{silver_cont_name}@{storage_acct_name}.dfs.core.windows.net/{location_from_container}contract/abc"
 
+silver_data_exists = True
 # two dataframes for each file type
 try:
     assistance_current_silver = spark.read.parquet(assistance_location, header=True, inferSchema=True)
     contract_current_silver = spark.read.parquet(contract_location, header=True, inferSchema=True)
 except:
-    print('throw error')
+    silver_data_exists = False
 
-# COMMAND ----------
-
-assistance_current_silver2 = spark.read.parquet(assistance_location, header=True, inferSchema=True)
-contract_current_silver2 = spark.read.parquet(contract_location, header=True, inferSchema=True)
-
-# COMMAND ----------
-
-display(assistance_current_silver2)
-
-# COMMAND ----------
-
-assistance = assistance_current_silver.union(assistance).distinct()
-contract = contract_current_silver.union(contract).distinct()
-
-# COMMAND ----------
-
-display(assistance)
-
-# COMMAND ----------
-
-
+if (silver_data_exists):
+    assistance = assistance_current_silver.union(assistance).distinct()
+    contract = contract_current_silver.union(contract).distinct()
 
 # COMMAND ----------
 
