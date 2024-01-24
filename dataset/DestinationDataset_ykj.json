@@ -1,0 +1,18 @@
+{
+	"name": "DestinationDataset_ykj",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "20231113-synapse-workspace-WorkspaceDefaultStorage",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "Binary",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobFSLocation",
+				"folderPath": "usa_spending/test_api",
+				"fileSystem": "landing-zone"
+			}
+		}
+	}
+}
