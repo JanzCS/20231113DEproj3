@@ -7,6 +7,12 @@
 				"description": "Run the bronze to silver pipeline to add new data to the silver layer",
 				"type": "ExecutePipeline",
 				"dependsOn": [],
+				"userProperties": [
+					{
+						"name": "test",
+						"value": "123"
+					}
+				],
 				"typeProperties": {
 					"pipeline": {
 						"referenceName": "Yearly B2S",
