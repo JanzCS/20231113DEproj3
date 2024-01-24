@@ -100,7 +100,7 @@
 					"scripts": [
 						{
 							"type": "Query",
-							"text": "DROP TABLE Prod.DimBusinessSize;\nDROP TABLE Prod.DimCFDA;\nDROP TABLE Prod.DimCountryOfOrigin;\nDROP TABLE Prod.DimNAICS;\nDROP TABLE Prod.DimOffice;\nDROP TABLE Prod.DimPrimaryPlaceOfPerformanceScope\nDROP TABLE Prod.FactContract;\n\nDROP TABLE Prod.DimAgency;\nDROP TABLE Prod.DimCongressionalDistrict;\nDROP TABLE Prod.DimHighlyCompensatedOfficer;\nDROP TABLE Prod.DimCountry;\nDROP TABLE Prod.DimRecipient;\nDROP TABLE Prod.DimState;\nDROP TABLE Prod.DimCounty;\nDROP TABLE Prod.DimDate;\nDROP TABLE Prod.FactTransaction;\nDROP TABLE Prod.FactAssistance;\n\nDROP SCHEMA Prod;"
+							"text": "DROP VIEW [Prod].[ViewAgenciesByDay]\nDROP VIEW [Prod].[ViewIndustriesByDay]\nDROP VIEW [Prod].[ViewSummaryByAward]\nDROP VIEW [Prod].[ViewSummaryTotalsByDay]\nDROP VIEW [Prod].[ViewSummaryTotalsByMonth]\n\n\n\nDROP TABLE Prod.DimBusinessSize;\nDROP TABLE Prod.DimCFDA;\nDROP TABLE Prod.DimCountryOfOrigin;\nDROP TABLE Prod.DimNAICS;\nDROP TABLE Prod.DimOffice;\nDROP TABLE Prod.DimPrimaryPlaceOfPerformanceScope\nDROP TABLE Prod.FactContract;\n\nDROP TABLE Prod.DimAgency;\nDROP TABLE Prod.DimCongressionalDistrict;\nDROP TABLE Prod.DimHighlyCompensatedOfficer;\nDROP TABLE Prod.DimCountry;\nDROP TABLE Prod.DimRecipient;\nDROP TABLE Prod.DimState;\nDROP TABLE Prod.DimCounty;\nDROP TABLE Prod.DimDate;\nDROP TABLE Prod.FactTransaction;\nDROP TABLE Prod.FactAssistance;\n\n\nDROP SCHEMA Prod;"
 						}
 					],
 					"scriptBlockExecutionTimeout": "02:00:00"
