@@ -280,5 +280,5 @@ assistance_location = f"abfss://{silver_cont_name}@{storage_acct_name}.dfs.core.
 contract_location = f"abfss://{silver_cont_name}@{storage_acct_name}.dfs.core.windows.net/{location_from_container}contract"
 
 # Dataframe for each file type
-assistance.repartition(1).write.parquet(assistance_location)
-contract.repartition(1).write.parquet(contract_location)
+assistance.repartition(1).write.mode('overwrite').parquet(assistance_location)
+contract.repartition(1).write.mode('overwrite').parquet(contract_location)
