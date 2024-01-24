@@ -74,10 +74,21 @@
 						"referenceName": "Yearly B2S",
 						"type": "PipelineReference"
 					},
-					"waitOnCompletion": true
+					"waitOnCompletion": true,
+					"parameters": {
+						"year": {
+							"value": "@pipeline().parameters.year",
+							"type": "Expression"
+						}
+					}
 				}
 			}
 		],
+		"parameters": {
+			"year": {
+				"type": "string"
+			}
+		},
 		"variables": {
 			"year": {
 				"type": "String",
