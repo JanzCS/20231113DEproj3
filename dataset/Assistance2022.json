@@ -1,0 +1,17 @@
+{
+	"name": "Assistance2022",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "UsaSpending Award Data Archve",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "Binary",
+		"typeProperties": {
+			"location": {
+				"type": "HttpServerLocation",
+				"relativeUrl": "FY2022_All_Assistance_Full_20240122.zip"
+			}
+		}
+	}
+}
