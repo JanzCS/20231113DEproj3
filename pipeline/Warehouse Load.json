@@ -17,7 +17,10 @@
 				"userProperties": [],
 				"linkedServiceName": {
 					"referenceName": "20231113-synapse-workspace-WorkspaceDefaultSqlServer",
-					"type": "LinkedServiceReference"
+					"type": "LinkedServiceReference",
+					"parameters": {
+						"DBName": "Project3DW"
+					}
 				},
 				"typeProperties": {
 					"scripts": [
@@ -51,7 +54,10 @@
 				"userProperties": [],
 				"linkedServiceName": {
 					"referenceName": "20231113-synapse-workspace-WorkspaceDefaultSqlServer",
-					"type": "LinkedServiceReference"
+					"type": "LinkedServiceReference",
+					"parameters": {
+						"DBName": "Project3DW"
+					}
 				},
 				"typeProperties": {
 					"scripts": [
