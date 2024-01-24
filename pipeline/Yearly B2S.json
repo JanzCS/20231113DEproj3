@@ -35,12 +35,6 @@
 				"type": "string"
 			}
 		},
-		"variables": {
-			"year": {
-				"type": "String",
-				"defaultValue": "@variables('year')"
-			}
-		},
 		"annotations": []
 	}
 }
