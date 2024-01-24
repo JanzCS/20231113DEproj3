@@ -1,0 +1,1209 @@
+{
+	"name": "SourceDataset_k9n",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "UsaSpending Award Data Archve",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "DelimitedText",
+		"typeProperties": {
+			"location": {
+				"type": "HttpServerLocation",
+				"relativeUrl": "FY2023_All_Contracts_Full_20240122.zip"
+			},
+			"columnDelimiter": ",",
+			"rowDelimiter": "\r",
+			"compressionCodec": "ZipDeflate",
+			"escapeChar": "\\",
+			"firstRowAsHeader": true,
+			"quoteChar": null
+		},
+		"schema": [
+			{
+				"name": "contract_transaction_unique_key",
+				"type": "String"
+			},
+			{
+				"name": "contract_award_unique_key",
+				"type": "String"
+			},
+			{
+				"name": "award_id_piid",
+				"type": "String"
+			},
+			{
+				"name": "modification_number",
+				"type": "String"
+			},
+			{
+				"name": "transaction_number",
+				"type": "String"
+			},
+			{
+				"name": "parent_award_agency_id",
+				"type": "String"
+			},
+			{
+				"name": "parent_award_agency_name",
+				"type": "String"
+			},
+			{
+				"name": "parent_award_id_piid",
+				"type": "String"
+			},
+			{
+				"name": "parent_award_modification_number",
+				"type": "String"
+			},
+			{
+				"name": "federal_action_obligation",
+				"type": "String"
+			},
+			{
+				"name": "total_dollars_obligated",
+				"type": "String"
+			},
+			{
+				"name": "total_outlayed_amount_for_overall_award",
+				"type": "String"
+			},
+			{
+				"name": "base_and_exercised_options_value",
+				"type": "String"
+			},
+			{
+				"name": "current_total_value_of_award",
+				"type": "String"
+			},
+			{
+				"name": "base_and_all_options_value",
+				"type": "String"
+			},
+			{
+				"name": "potential_total_value_of_award",
+				"type": "String"
+			},
+			{
+				"name": "disaster_emergency_fund_codes_for_overall_award",
+				"type": "String"
+			},
+			{
+				"name": "outlayed_amount_from_COVID-19_supplementals_for_overall_award",
+				"type": "String"
+			},
+			{
+				"name": "obligated_amount_from_COVID-19_supplementals_for_overall_award",
+				"type": "String"
+			},
+			{
+				"name": "outlayed_amount_from_IIJA_supplemental_for_overall_award",
+				"type": "String"
+			},
+			{
+				"name": "obligated_amount_from_IIJA_supplemental_for_overall_award",
+				"type": "String"
+			},
+			{
+				"name": "action_date",
+				"type": "String"
+			},
+			{
+				"name": "action_date_fiscal_year",
+				"type": "String"
+			},
+			{
+				"name": "period_of_performance_start_date",
+				"type": "String"
+			},
+			{
+				"name": "period_of_performance_current_end_date",
+				"type": "String"
+			},
+			{
+				"name": "period_of_performance_potential_end_date",
+				"type": "String"
+			},
+			{
+				"name": "ordering_period_end_date",
+				"type": "String"
+			},
+			{
+				"name": "solicitation_date",
+				"type": "String"
+			},
+			{
+				"name": "awarding_agency_code",
+				"type": "String"
+			},
+			{
+				"name": "awarding_agency_name",
+				"type": "String"
+			},
+			{
+				"name": "awarding_sub_agency_code",
+				"type": "String"
+			},
+			{
+				"name": "awarding_sub_agency_name",
+				"type": "String"
+			},
+			{
+				"name": "awarding_office_code",
+				"type": "String"
+			},
+			{
+				"name": "awarding_office_name",
+				"type": "String"
+			},
+			{
+				"name": "funding_agency_code",
+				"type": "String"
+			},
+			{
+				"name": "funding_agency_name",
+				"type": "String"
+			},
+			{
+				"name": "funding_sub_agency_code",
+				"type": "String"
+			},
+			{
+				"name": "funding_sub_agency_name",
+				"type": "String"
+			},
+			{
+				"name": "funding_office_code",
+				"type": "String"
+			},
+			{
+				"name": "funding_office_name",
+				"type": "String"
+			},
+			{
+				"name": "treasury_accounts_funding_this_award",
+				"type": "String"
+			},
+			{
+				"name": "federal_accounts_funding_this_award",
+				"type": "String"
+			},
+			{
+				"name": "object_classes_funding_this_award",
+				"type": "String"
+			},
+			{
+				"name": "program_activities_funding_this_award",
+				"type": "String"
+			},
+			{
+				"name": "foreign_funding",
+				"type": "String"
+			},
+			{
+				"name": "foreign_funding_description",
+				"type": "String"
+			},
+			{
+				"name": "sam_exception",
+				"type": "String"
+			},
+			{
+				"name": "sam_exception_description",
+				"type": "String"
+			},
+			{
+				"name": "recipient_uei",
+				"type": "String"
+			},
+			{
+				"name": "recipient_duns",
+				"type": "String"
+			},
+			{
+				"name": "recipient_name",
+				"type": "String"
+			},
+			{
+				"name": "recipient_name_raw",
+				"type": "String"
+			},
+			{
+				"name": "recipient_doing_business_as_name",
+				"type": "String"
+			},
+			{
+				"name": "cage_code",
+				"type": "String"
+			},
+			{
+				"name": "recipient_parent_uei",
+				"type": "String"
+			},
+			{
+				"name": "recipient_parent_duns",
+				"type": "String"
+			},
+			{
+				"name": "recipient_parent_name",
+				"type": "String"
+			},
+			{
+				"name": "recipient_parent_name_raw",
+				"type": "String"
+			},
+			{
+				"name": "recipient_country_code",
+				"type": "String"
+			},
+			{
+				"name": "recipient_country_name",
+				"type": "String"
+			},
+			{
+				"name": "recipient_address_line_1",
+				"type": "String"
+			},
+			{
+				"name": "recipient_address_line_2",
+				"type": "String"
+			},
+			{
+				"name": "recipient_city_name",
+				"type": "String"
+			},
+			{
+				"name": "prime_award_transaction_recipient_county_fips_code",
+				"type": "String"
+			},
+			{
+				"name": "recipient_county_name",
+				"type": "String"
+			},
+			{
+				"name": "prime_award_transaction_recipient_state_fips_code",
+				"type": "String"
+			},
+			{
+				"name": "recipient_state_code",
+				"type": "String"
+			},
+			{
+				"name": "recipient_state_name",
+				"type": "String"
+			},
+			{
+				"name": "recipient_zip_4_code",
+				"type": "String"
+			},
+			{
+				"name": "prime_award_transaction_recipient_cd_original",
+				"type": "String"
+			},
+			{
+				"name": "prime_award_transaction_recipient_cd_current",
+				"type": "String"
+			},
+			{
+				"name": "recipient_phone_number",
+				"type": "String"
+			},
+			{
+				"name": "recipient_fax_number",
+				"type": "String"
+			},
+			{
+				"name": "primary_place_of_performance_country_code",
+				"type": "String"
+			},
+			{
+				"name": "primary_place_of_performance_country_name",
+				"type": "String"
+			},
+			{
+				"name": "primary_place_of_performance_city_name",
+				"type": "String"
+			},
+			{
+				"name": "prime_award_transaction_place_of_performance_county_fips_code",
+				"type": "String"
+			},
+			{
+				"name": "primary_place_of_performance_county_name",
+				"type": "String"
+			},
+			{
+				"name": "prime_award_transaction_place_of_performance_state_fips_code",
+				"type": "String"
+			},
+			{
+				"name": "primary_place_of_performance_state_code",
+				"type": "String"
+			},
+			{
+				"name": "primary_place_of_performance_state_name",
+				"type": "String"
+			},
+			{
+				"name": "primary_place_of_performance_zip_4",
+				"type": "String"
+			},
+			{
+				"name": "prime_award_transaction_place_of_performance_cd_original",
+				"type": "String"
+			},
+			{
+				"name": "prime_award_transaction_place_of_performance_cd_current",
+				"type": "String"
+			},
+			{
+				"name": "award_or_idv_flag",
+				"type": "String"
+			},
+			{
+				"name": "award_type_code",
+				"type": "String"
+			},
+			{
+				"name": "award_type",
+				"type": "String"
+			},
+			{
+				"name": "idv_type_code",
+				"type": "String"
+			},
+			{
+				"name": "idv_type",
+				"type": "String"
+			},
+			{
+				"name": "multiple_or_single_award_idv_code",
+				"type": "String"
+			},
+			{
+				"name": "multiple_or_single_award_idv",
+				"type": "String"
+			},
+			{
+				"name": "type_of_idc_code",
+				"type": "String"
+			},
+			{
+				"name": "type_of_idc",
+				"type": "String"
+			},
+			{
+				"name": "type_of_contract_pricing_code",
+				"type": "String"
+			},
+			{
+				"name": "type_of_contract_pricing",
+				"type": "String"
+			},
+			{
+				"name": "transaction_description",
+				"type": "String"
+			},
+			{
+				"name": "prime_award_base_transaction_description",
+				"type": "String"
+			},
+			{
+				"name": "action_type_code",
+				"type": "String"
+			},
+			{
+				"name": "action_type",
+				"type": "String"
+			},
+			{
+				"name": "solicitation_identifier",
+				"type": "String"
+			},
+			{
+				"name": "number_of_actions",
+				"type": "String"
+			},
+			{
+				"name": "inherently_governmental_functions",
+				"type": "String"
+			},
+			{
+				"name": "inherently_governmental_functions_description",
+				"type": "String"
+			},
+			{
+				"name": "product_or_service_code",
+				"type": "String"
+			},
+			{
+				"name": "product_or_service_code_description",
+				"type": "String"
+			},
+			{
+				"name": "contract_bundling_code",
+				"type": "String"
+			},
+			{
+				"name": "contract_bundling",
+				"type": "String"
+			},
+			{
+				"name": "dod_claimant_program_code",
+				"type": "String"
+			},
+			{
+				"name": "dod_claimant_program_description",
+				"type": "String"
+			},
+			{
+				"name": "naics_code",
+				"type": "String"
+			},
+			{
+				"name": "naics_description",
+				"type": "String"
+			},
+			{
+				"name": "recovered_materials_sustainability_code",
+				"type": "String"
+			},
+			{
+				"name": "recovered_materials_sustainability",
+				"type": "String"
+			},
+			{
+				"name": "domestic_or_foreign_entity_code",
+				"type": "String"
+			},
+			{
+				"name": "domestic_or_foreign_entity",
+				"type": "String"
+			},
+			{
+				"name": "dod_acquisition_program_code",
+				"type": "String"
+			},
+			{
+				"name": "dod_acquisition_program_description",
+				"type": "String"
+			},
+			{
+				"name": "information_technology_commercial_item_category_code",
+				"type": "String"
+			},
+			{
+				"name": "information_technology_commercial_item_category",
+				"type": "String"
+			},
+			{
+				"name": "epa_designated_product_code",
+				"type": "String"
+			},
+			{
+				"name": "epa_designated_product",
+				"type": "String"
+			},
+			{
+				"name": "country_of_product_or_service_origin_code",
+				"type": "String"
+			},
+			{
+				"name": "country_of_product_or_service_origin",
+				"type": "String"
+			},
+			{
+				"name": "place_of_manufacture_code",
+				"type": "String"
+			},
+			{
+				"name": "place_of_manufacture",
+				"type": "String"
+			},
+			{
+				"name": "subcontracting_plan_code",
+				"type": "String"
+			},
+			{
+				"name": "subcontracting_plan",
+				"type": "String"
+			},
+			{
+				"name": "extent_competed_code",
+				"type": "String"
+			},
+			{
+				"name": "extent_competed",
+				"type": "String"
+			},
+			{
+				"name": "solicitation_procedures_code",
+				"type": "String"
+			},
+			{
+				"name": "solicitation_procedures",
+				"type": "String"
+			},
+			{
+				"name": "type_of_set_aside_code",
+				"type": "String"
+			},
+			{
+				"name": "type_of_set_aside",
+				"type": "String"
+			},
+			{
+				"name": "evaluated_preference_code",
+				"type": "String"
+			},
+			{
+				"name": "evaluated_preference",
+				"type": "String"
+			},
+			{
+				"name": "research_code",
+				"type": "String"
+			},
+			{
+				"name": "research",
+				"type": "String"
+			},
+			{
+				"name": "fair_opportunity_limited_sources_code",
+				"type": "String"
+			},
+			{
+				"name": "fair_opportunity_limited_sources",
+				"type": "String"
+			},
+			{
+				"name": "other_than_full_and_open_competition_code",
+				"type": "String"
+			},
+			{
+				"name": "other_than_full_and_open_competition",
+				"type": "String"
+			},
+			{
+				"name": "number_of_offers_received",
+				"type": "String"
+			},
+			{
+				"name": "commercial_item_acquisition_procedures_code",
+				"type": "String"
+			},
+			{
+				"name": "commercial_item_acquisition_procedures",
+				"type": "String"
+			},
+			{
+				"name": "small_business_competitiveness_demonstration_program",
+				"type": "String"
+			},
+			{
+				"name": "simplified_procedures_for_certain_commercial_items_code",
+				"type": "String"
+			},
+			{
+				"name": "simplified_procedures_for_certain_commercial_items",
+				"type": "String"
+			},
+			{
+				"name": "a76_fair_act_action_code",
+				"type": "String"
+			},
+			{
+				"name": "a76_fair_act_action",
+				"type": "String"
+			},
+			{
+				"name": "fed_biz_opps_code",
+				"type": "String"
+			},
+			{
+				"name": "fed_biz_opps",
+				"type": "String"
+			},
+			{
+				"name": "local_area_set_aside_code",
+				"type": "String"
+			},
+			{
+				"name": "local_area_set_aside",
+				"type": "String"
+			},
+			{
+				"name": "price_evaluation_adjustment_preference_percent_difference",
+				"type": "String"
+			},
+			{
+				"name": "clinger_cohen_act_planning_code",
+				"type": "String"
+			},
+			{
+				"name": "clinger_cohen_act_planning",
+				"type": "String"
+			},
+			{
+				"name": "materials_supplies_articles_equipment_code",
+				"type": "String"
+			},
+			{
+				"name": "materials_supplies_articles_equipment",
+				"type": "String"
+			},
+			{
+				"name": "labor_standards_code",
+				"type": "String"
+			},
+			{
+				"name": "labor_standards",
+				"type": "String"
+			},
+			{
+				"name": "construction_wage_rate_requirements_code",
+				"type": "String"
+			},
+			{
+				"name": "construction_wage_rate_requirements",
+				"type": "String"
+			},
+			{
+				"name": "interagency_contracting_authority_code",
+				"type": "String"
+			},
+			{
+				"name": "interagency_contracting_authority",
+				"type": "String"
+			},
+			{
+				"name": "other_statutory_authority",
+				"type": "String"
+			},
+			{
+				"name": "program_acronym",
+				"type": "String"
+			},
+			{
+				"name": "parent_award_type_code",
+				"type": "String"
+			},
+			{
+				"name": "parent_award_type",
+				"type": "String"
+			},
+			{
+				"name": "parent_award_single_or_multiple_code",
+				"type": "String"
+			},
+			{
+				"name": "parent_award_single_or_multiple",
+				"type": "String"
+			},
+			{
+				"name": "major_program",
+				"type": "String"
+			},
+			{
+				"name": "national_interest_action_code",
+				"type": "String"
+			},
+			{
+				"name": "national_interest_action",
+				"type": "String"
+			},
+			{
+				"name": "cost_or_pricing_data_code",
+				"type": "String"
+			},
+			{
+				"name": "cost_or_pricing_data",
+				"type": "String"
+			},
+			{
+				"name": "cost_accounting_standards_clause_code",
+				"type": "String"
+			},
+			{
+				"name": "cost_accounting_standards_clause",
+				"type": "String"
+			},
+			{
+				"name": "government_furnished_property_code",
+				"type": "String"
+			},
+			{
+				"name": "government_furnished_property",
+				"type": "String"
+			},
+			{
+				"name": "sea_transportation_code",
+				"type": "String"
+			},
+			{
+				"name": "sea_transportation",
+				"type": "String"
+			},
+			{
+				"name": "undefinitized_action_code",
+				"type": "String"
+			},
+			{
+				"name": "undefinitized_action",
+				"type": "String"
+			},
+			{
+				"name": "consolidated_contract_code",
+				"type": "String"
+			},
+			{
+				"name": "consolidated_contract",
+				"type": "String"
+			},
+			{
+				"name": "performance_based_service_acquisition_code",
+				"type": "String"
+			},
+			{
+				"name": "performance_based_service_acquisition",
+				"type": "String"
+			},
+			{
+				"name": "multi_year_contract_code",
+				"type": "String"
+			},
+			{
+				"name": "multi_year_contract",
+				"type": "String"
+			},
+			{
+				"name": "contract_financing_code",
+				"type": "String"
+			},
+			{
+				"name": "contract_financing",
+				"type": "String"
+			},
+			{
+				"name": "purchase_card_as_payment_method_code",
+				"type": "String"
+			},
+			{
+				"name": "purchase_card_as_payment_method",
+				"type": "String"
+			},
+			{
+				"name": "contingency_humanitarian_or_peacekeeping_operation_code",
+				"type": "String"
+			},
+			{
+				"name": "contingency_humanitarian_or_peacekeeping_operation",
+				"type": "String"
+			},
+			{
+				"name": "alaskan_native_corporation_owned_firm",
+				"type": "String"
+			},
+			{
+				"name": "american_indian_owned_business",
+				"type": "String"
+			},
+			{
+				"name": "indian_tribe_federally_recognized",
+				"type": "String"
+			},
+			{
+				"name": "native_hawaiian_organization_owned_firm",
+				"type": "String"
+			},
+			{
+				"name": "tribally_owned_firm",
+				"type": "String"
+			},
+			{
+				"name": "veteran_owned_business",
+				"type": "String"
+			},
+			{
+				"name": "service_disabled_veteran_owned_business",
+				"type": "String"
+			},
+			{
+				"name": "woman_owned_business",
+				"type": "String"
+			},
+			{
+				"name": "women_owned_small_business",
+				"type": "String"
+			},
+			{
+				"name": "economically_disadvantaged_women_owned_small_business",
+				"type": "String"
+			},
+			{
+				"name": "joint_venture_women_owned_small_business",
+				"type": "String"
+			},
+			{
+				"name": "joint_venture_economic_disadvantaged_women_owned_small_bus",
+				"type": "String"
+			},
+			{
+				"name": "minority_owned_business",
+				"type": "String"
+			},
+			{
+				"name": "subcontinent_asian_asian_indian_american_owned_business",
+				"type": "String"
+			},
+			{
+				"name": "asian_pacific_american_owned_business",
+				"type": "String"
+			},
+			{
+				"name": "black_american_owned_business",
+				"type": "String"
+			},
+			{
+				"name": "hispanic_american_owned_business",
+				"type": "String"
+			},
+			{
+				"name": "native_american_owned_business",
+				"type": "String"
+			},
+			{
+				"name": "other_minority_owned_business",
+				"type": "String"
+			},
+			{
+				"name": "contracting_officers_determination_of_business_size",
+				"type": "String"
+			},
+			{
+				"name": "contracting_officers_determination_of_business_size_code",
+				"type": "String"
+			},
+			{
+				"name": "emerging_small_business",
+				"type": "String"
+			},
+			{
+				"name": "community_developed_corporation_owned_firm",
+				"type": "String"
+			},
+			{
+				"name": "labor_surplus_area_firm",
+				"type": "String"
+			},
+			{
+				"name": "us_federal_government",
+				"type": "String"
+			},
+			{
+				"name": "federally_funded_research_and_development_corp",
+				"type": "String"
+			},
+			{
+				"name": "federal_agency",
+				"type": "String"
+			},
+			{
+				"name": "us_state_government",
+				"type": "String"
+			},
+			{
+				"name": "us_local_government",
+				"type": "String"
+			},
+			{
+				"name": "city_local_government",
+				"type": "String"
+			},
+			{
+				"name": "county_local_government",
+				"type": "String"
+			},
+			{
+				"name": "inter_municipal_local_government",
+				"type": "String"
+			},
+			{
+				"name": "local_government_owned",
+				"type": "String"
+			},
+			{
+				"name": "municipality_local_government",
+				"type": "String"
+			},
+			{
+				"name": "school_district_local_government",
+				"type": "String"
+			},
+			{
+				"name": "township_local_government",
+				"type": "String"
+			},
+			{
+				"name": "us_tribal_government",
+				"type": "String"
+			},
+			{
+				"name": "foreign_government",
+				"type": "String"
+			},
+			{
+				"name": "organizational_type",
+				"type": "String"
+			},
+			{
+				"name": "corporate_entity_not_tax_exempt",
+				"type": "String"
+			},
+			{
+				"name": "corporate_entity_tax_exempt",
+				"type": "String"
+			},
+			{
+				"name": "partnership_or_limited_liability_partnership",
+				"type": "String"
+			},
+			{
+				"name": "sole_proprietorship",
+				"type": "String"
+			},
+			{
+				"name": "small_agricultural_cooperative",
+				"type": "String"
+			},
+			{
+				"name": "international_organization",
+				"type": "String"
+			},
+			{
+				"name": "us_government_entity",
+				"type": "String"
+			},
+			{
+				"name": "community_development_corporation",
+				"type": "String"
+			},
+			{
+				"name": "domestic_shelter",
+				"type": "String"
+			},
+			{
+				"name": "educational_institution",
+				"type": "String"
+			},
+			{
+				"name": "foundation",
+				"type": "String"
+			},
+			{
+				"name": "hospital_flag",
+				"type": "String"
+			},
+			{
+				"name": "manufacturer_of_goods",
+				"type": "String"
+			},
+			{
+				"name": "veterinary_hospital",
+				"type": "String"
+			},
+			{
+				"name": "hispanic_servicing_institution",
+				"type": "String"
+			},
+			{
+				"name": "receives_contracts",
+				"type": "String"
+			},
+			{
+				"name": "receives_financial_assistance",
+				"type": "String"
+			},
+			{
+				"name": "receives_contracts_and_financial_assistance",
+				"type": "String"
+			},
+			{
+				"name": "airport_authority",
+				"type": "String"
+			},
+			{
+				"name": "council_of_governments",
+				"type": "String"
+			},
+			{
+				"name": "housing_authorities_public_tribal",
+				"type": "String"
+			},
+			{
+				"name": "interstate_entity",
+				"type": "String"
+			},
+			{
+				"name": "planning_commission",
+				"type": "String"
+			},
+			{
+				"name": "port_authority",
+				"type": "String"
+			},
+			{
+				"name": "transit_authority",
+				"type": "String"
+			},
+			{
+				"name": "subchapter_scorporation",
+				"type": "String"
+			},
+			{
+				"name": "limited_liability_corporation",
+				"type": "String"
+			},
+			{
+				"name": "foreign_owned",
+				"type": "String"
+			},
+			{
+				"name": "for_profit_organization",
+				"type": "String"
+			},
+			{
+				"name": "nonprofit_organization",
+				"type": "String"
+			},
+			{
+				"name": "other_not_for_profit_organization",
+				"type": "String"
+			},
+			{
+				"name": "the_ability_one_program",
+				"type": "String"
+			},
+			{
+				"name": "private_university_or_college",
+				"type": "String"
+			},
+			{
+				"name": "state_controlled_institution_of_higher_learning",
+				"type": "String"
+			},
+			{
+				"name": "1862_land_grant_college",
+				"type": "String"
+			},
+			{
+				"name": "1890_land_grant_college",
+				"type": "String"
+			},
+			{
+				"name": "1994_land_grant_college",
+				"type": "String"
+			},
+			{
+				"name": "minority_institution",
+				"type": "String"
+			},
+			{
+				"name": "historically_black_college",
+				"type": "String"
+			},
+			{
+				"name": "tribal_college",
+				"type": "String"
+			},
+			{
+				"name": "alaskan_native_servicing_institution",
+				"type": "String"
+			},
+			{
+				"name": "native_hawaiian_servicing_institution",
+				"type": "String"
+			},
+			{
+				"name": "school_of_forestry",
+				"type": "String"
+			},
+			{
+				"name": "veterinary_college",
+				"type": "String"
+			},
+			{
+				"name": "dot_certified_disadvantage",
+				"type": "String"
+			},
+			{
+				"name": "self_certified_small_disadvantaged_business",
+				"type": "String"
+			},
+			{
+				"name": "small_disadvantaged_business",
+				"type": "String"
+			},
+			{
+				"name": "c8a_program_participant",
+				"type": "String"
+			},
+			{
+				"name": "historically_underutilized_business_zone_hubzone_firm",
+				"type": "String"
+			},
+			{
+				"name": "sba_certified_8a_joint_venture",
+				"type": "String"
+			},
+			{
+				"name": "highly_compensated_officer_1_name",
+				"type": "String"
+			},
+			{
+				"name": "highly_compensated_officer_1_amount",
+				"type": "String"
+			},
+			{
+				"name": "highly_compensated_officer_2_name",
+				"type": "String"
+			},
+			{
+				"name": "highly_compensated_officer_2_amount",
+				"type": "String"
+			},
+			{
+				"name": "highly_compensated_officer_3_name",
+				"type": "String"
+			},
+			{
+				"name": "highly_compensated_officer_3_amount",
+				"type": "String"
+			},
+			{
+				"name": "highly_compensated_officer_4_name",
+				"type": "String"
+			},
+			{
+				"name": "highly_compensated_officer_4_amount",
+				"type": "String"
+			},
+			{
+				"name": "highly_compensated_officer_5_name",
+				"type": "String"
+			},
+			{
+				"name": "highly_compensated_officer_5_amount",
+				"type": "String"
+			},
+			{
+				"name": "usaspending_permalink",
+				"type": "String"
+			},
+			{
+				"name": "last_modified_date",
+				"type": "String"
+			}
+		]
+	}
+}
