@@ -1,0 +1,40 @@
+{
+	"name": "Yearly B2S",
+	"properties": {
+		"activities": [
+			{
+				"name": "Contract and Assistance b2s",
+				"description": "Process one year of data from the bronze to the silver layer and combine with data that is currently in the silver layer ",
+				"type": "DatabricksNotebook",
+				"dependsOn": [],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"notebookPath": "/Repos/paul.spadaccini@skillstormnextgen.onmicrosoft.com/20231113DEproj3/src/bronze_to_silver_incremental",
+					"baseParameters": {
+						"year": {
+							"value": "@pipeline().parameters.year",
+							"type": "Expression"
+						}
+					}
+				},
+				"linkedServiceName": {
+					"referenceName": "AzureDatabricks",
+					"type": "LinkedServiceReference"
+				}
+			}
+		],
+		"parameters": {
+			"year": {
+				"type": "string"
+			}
+		},
+		"annotations": []
+	}
+}
