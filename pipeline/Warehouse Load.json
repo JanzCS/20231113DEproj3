@@ -32,7 +32,7 @@
 				"typeProperties": {
 					"scripts": [
 						{
-							"type": "Query",
+							"type": "NonQuery",
 							"text": "CREATE SCHEMA Prod"
 						}
 					],
