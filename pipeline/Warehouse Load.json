@@ -33,7 +33,7 @@
 					"scripts": [
 						{
 							"type": "Query",
-							"text": "CREATE SCHEMA Prod;\nGO"
+							"text": "CREATE SCHEMA Prod"
 						}
 					],
 					"scriptBlockExecutionTimeout": "02:00:00"
