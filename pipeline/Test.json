@@ -6,7 +6,14 @@
 				"name": "Assistance and Transaction B2S",
 				"description": "Run the bronze to silver pipeline to add new data to the silver layer",
 				"type": "ExecutePipeline",
-				"dependsOn": [],
+				"dependsOn": [
+					{
+						"activity": "Choose a year to load",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
 				"userProperties": [
 					{
 						"name": "test",
@@ -20,12 +27,26 @@
 					},
 					"waitOnCompletion": true
 				}
+			},
+			{
+				"name": "Choose a year to load",
+				"type": "SetVariable",
+				"dependsOn": [],
+				"policy": {
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"variableName": "year",
+					"value": "2023"
+				}
 			}
 		],
 		"variables": {
 			"year": {
 				"type": "String",
-				"defaultValue": "2023"
+				"defaultValue": "@variables('year')"
 			}
 		},
 		"annotations": []

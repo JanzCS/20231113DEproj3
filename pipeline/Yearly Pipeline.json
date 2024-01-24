@@ -81,7 +81,7 @@
 		"variables": {
 			"year": {
 				"type": "String",
-				"defaultValue": "2023"
+				"defaultValue": "@variables('year')"
 			}
 		},
 		"annotations": []
