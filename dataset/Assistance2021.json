@@ -11,6 +11,9 @@
 			"location": {
 				"type": "HttpServerLocation",
 				"relativeUrl": "FY2021_All_Assistance_Full_20240122.zip"
+			},
+			"compression": {
+				"type": "ZipDeflate"
 			}
 		}
 	}
