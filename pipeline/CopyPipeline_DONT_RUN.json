@@ -1,5 +1,5 @@
 {
-	"name": "1CopyPipeline_DONT_RUN",
+	"name": "CopyPipeline_DONT_RUN",
 	"properties": {
 		"activities": [
 			{
