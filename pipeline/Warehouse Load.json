@@ -45,7 +45,7 @@
 				"type": "Script",
 				"dependsOn": [
 					{
-						"activity": "Create SQL Schema_copy1",
+						"activity": "Create SQL Tables",
 						"dependencyConditions": [
 							"Succeeded"
 						]
@@ -107,7 +107,7 @@
 				}
 			},
 			{
-				"name": "Create SQL Schema_copy1",
+				"name": "Create SQL Tables",
 				"description": "Create all of the tables that are in our Synapse Data Warehouse",
 				"type": "Script",
 				"dependsOn": [
