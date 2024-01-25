@@ -1,0 +1,17 @@
+{
+	"name": "SQL script 1",
+	"properties": {
+		"content": {
+			"query": "SELECT \n    t.award_unique_key,\n    t.action_date_key,\n    t.total_obligated_amount,\n    a.total_face_value_of_loan\nINTO Prod.AwardByDateTable\nFROM Prod.FactTransaction t\nJOIN Prod.FactAssistance a ON t.transaction_unique_key = a.transaction_unique_key\nGROUP BY t.award_unique_key, t.action_date_key, t.total_obligated_amount, a.total_face_value_of_loan;\nGO;\n\nCREATE MATERIALIZED VIEW Prod.ViewSummaryByAward \nWITH (\n    DISTRIBUTION = HASH(action_date_key)\n) AS SELECT \n    action_date_key,\n    SUM(total_obligated_amount) AS total_obligated_amount,\n    SUM(total_face_value_of_loan) AS total_face_value_of_loan\nFROM Prod.ViewAwardByDate\nGROUP BY action_date_key;\nGO;\n\nWITH RankedTransactions AS (\n    SELECT \n        t.award_unique_key,\n        t.action_date_key,\n        t.total_obligated_amount,\n        a.total_face_value_of_loan,\n        ROW_NUMBER() OVER (PARTITION BY t.award_unique_key, t.action_date_key ORDER BY t.total_obligated_amount) as rn\n    FROM Prod.FactTransaction t\n    JOIN Prod.FactAssistance a ON t.transaction_unique_key = a.transaction_unique_key\n    WHERE t.action_date_key IS NOT NULL\n)\nSELECT \n    rt.action_date_key,\n    rt.award_unique_key,\n    SUM(rt.total_obligated_amount) AS total_obligated_amount,\n    SUM(rt.total_face_value_of_loan) AS total_face_value_of_loan\nINTO Prod.AwardByDateTable\nFROM RankedTransactions rt\nWHERE rt.rn = 1\nGROUP BY rt.action_date_key, rt.award_unique_key;",
+			"metadata": {
+				"language": "sql"
+			},
+			"currentConnection": {
+				"databaseName": "Project3DW",
+				"poolName": "Project3DW"
+			},
+			"resultLimit": 5000
+		},
+		"type": "SqlQuery"
+	}
+}
