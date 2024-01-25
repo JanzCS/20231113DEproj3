@@ -7,8 +7,8 @@
 				"language": "sql"
 			},
 			"currentConnection": {
-				"databaseName": "master",
-				"poolName": "Built-in"
+				"databaseName": "Project3DW",
+				"poolName": "Project3DW"
 			},
 			"resultLimit": 5000
 		},
