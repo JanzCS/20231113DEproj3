@@ -1,0 +1,17 @@
+{
+	"name": "Create Indexes",
+	"properties": {
+		"content": {
+			"query": "-- CREATE NONCLUSTERED INDEX action_date_key_idx ON Prod.FactTransaction (action_date_key)\n\n-- CREATE NONCLUSTERED INDEX award_unique_key_idx ON Prod.FactTransaction (award_unique_key)\n\n--CREATE NONCLUSTERED INDEX funding_agency_code_idx ON Prod.FactTransaction (funding_agency_code)\n\n--CREATE NONCLUSTERED INDEX naics_key_idx ON Prod.FactContract (naics_key)\n\n--CREATE NONCLUSTERED INDEX transaction_unique_key_idx ON Prod.FactTransaction (transaction_unique_key)\n\n--CREATE NONCLUSTERED INDEX transaction_unique_key_idx ON Prod.FactContract (transaction_unique_key)\n\n--CREATE NONCLUSTERED INDEX agency_code_idx ON Prod.DimAgency (agency_code)\n\n--CREATE NONCLUSTERED INDEX date_key_idx ON Prod.DimDate (date_key)\n\n--CREATE NONCLUSTERED INDEX transaction_unique_key_idx ON Prod.FactAssistance (transaction_unique_key)",
+			"metadata": {
+				"language": "sql"
+			},
+			"currentConnection": {
+				"databaseName": "Project3DW",
+				"poolName": "Project3DW"
+			},
+			"resultLimit": 5000
+		},
+		"type": "SqlQuery"
+	}
+}

@@ -1,0 +1,17 @@
+{
+	"name": "Materialized Views",
+	"properties": {
+		"content": {
+			"query": "-- AGGREGATES BY DAY\nCREATE MATERIALIZED VIEW Prod.ViewObligationByCounty\nWITH (\n    DISTRIBUTION = HASH(action_date_key)\n) AS SELECT \naction_date_key,\nCOUNT(transaction_unique_key) AS number_of_transactions\nFROM Prod.FactTransaction\nGROUP BY action_date_key;\nGO;",
+			"metadata": {
+				"language": "sql"
+			},
+			"currentConnection": {
+				"databaseName": "master",
+				"poolName": "Built-in"
+			},
+			"resultLimit": 5000
+		},
+		"type": "SqlQuery"
+	}
+}
