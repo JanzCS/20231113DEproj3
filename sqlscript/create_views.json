@@ -1,0 +1,17 @@
+{
+	"name": "create_views",
+	"properties": {
+		"content": {
+			"query": "CREATE MATERIALIZED VIEW Prod.ViewAgenciesByMonth\nWITH (\n    DISTRIBUTION = HASH(calendar_month)\n) AS SELECT \nd.calendar_month,\na.agency_name,\nCOUNT(a.agency_code) AS agency_count\nFROM Prod.FactTransaction t\nJOIN Prod.DimDate d ON d.date_key = t.action_date_key\nJOIN Prod.DimAgency a ON a.agency_code = t.funding_agency_code\nGROUP BY d.calendar_month, a.agency_name;\nGO;\n\nCREATE MATERIALIZED VIEW Prod.ViewIndustriesByMonth\nWITH (\n    DISTRIBUTION = HASH(calendar_month)\n) AS SELECT \nd.calendar_month,\nn.naics_code,\nn.naics_description,\nCOUNT(n.naics_key) AS industry_count\nFROM Prod.FactTransaction t\nJOIN Prod.DimDate d ON t.action_date_key = d.date_key\nJOIN Prod.FactContract c ON t.transaction_unique_key = c.transaction_unique_key\nJOIN Prod.DimNAICS n ON n.naics_key = c.naics_key\nGROUP BY d.calendar_month, n.naics_code, n.naics_description;\nGO;\n\nCREATE MATERIALIZED VIEW Prod.ViewSmallBusinessSummaryByMonth\nWITH (\n    DISTRIBUTION = HASH(calendar_month)\n) AS SELECT\nd.calendar_month,\nCOUNT_BIG(CASE WHEN c.business_size_key = 1 THEN 1 END) AS small_business_transactions,\nCOUNT_BIG(c.business_size_key) AS total_transactions\nFROM Prod.FactTransaction t\nJOIN Prod.DimDate d ON t.action_date_key = d.date_key\nJOIN Prod.FactContract c ON t.transaction_unique_key = c.transaction_unique_key\nGROUP BY d.calendar_month;\nGO;\n\n-- SUM of federal obligated amount based on county fips code with state\nCREATE MATERIALIZED VIEW Prod.ViewObligatedFedAmtByFips\nWITH (\n    DISTRIBUTION = HASH(prime_award_transaction_recipient_county_fips_code)\n) AS SELECT\nt.prime_award_transaction_recipient_county_fips_code,\nCOUNT_BIG(t.total_obligated_amount) AS [total obligated amount],\nc.ctyname AS [county name],\nc.stname AS [state name],\nc.gdp_2022,\nc.popestimate2019,\nc.popestimate2020,\nc.popestimate2021,\nc.popestimate2022\nFROM Prod.FactTransaction t\nJOIN Prod.DimCounty c ON t.prime_award_transaction_recipient_county_fips_code = c.county_fips\nGROUP BY t.prime_award_transaction_recipient_county_fips_code,\nc.ctyname,\nc.stname,\nc.gdp_2022,\nc.popestimate2019,\nc.popestimate2020,\nc.popestimate2021,\nc.popestimate2022\nGO;",
+			"metadata": {
+				"language": "sql"
+			},
+			"currentConnection": {
+				"databaseName": "Project3DW",
+				"poolName": "Project3DW"
+			},
+			"resultLimit": 5000
+		},
+		"type": "SqlQuery"
+	}
+}

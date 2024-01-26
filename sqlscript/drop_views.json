@@ -1,0 +1,17 @@
+{
+	"name": "drop_views",
+	"properties": {
+		"content": {
+			"query": "DROP VIEW Prod.ViewSummaryByAward;\nDROP VIEW Prod.ViewSummaryTotalsByDay;\nDROP VIEW Prod.ViewAgenciesByDay;\nDROP VIEW Prod.ViewIndustriesByDay;\nDROP VIEW Prod.ViewSmallBusinessSummaryByDay;",
+			"metadata": {
+				"language": "sql"
+			},
+			"currentConnection": {
+				"databaseName": "Project3DW",
+				"poolName": "Project3DW"
+			},
+			"resultLimit": 5000
+		},
+		"type": "SqlQuery"
+	}
+}
